@@ -100,3 +100,18 @@ Therefore:
 - **OPEN** Evidence behind the estimated 3 to 5 percent error rate. Treated as
   unknown until measured.
 - **OPEN** What happens to already-stored rows when the model or prompt changes.
+
+## Settled since first draft
+
+- **Scan ratio:** roughly 1:1 scans to digital-text PDFs. OCR is therefore
+  first-class, and grounding is only as reliable as OCR on half the volume.
+- **Stack:** TypeScript backend, Next.js frontend, Postgres. ADR 0006.
+- **OCR:** Gemini extracts, Tesseract produces the text layer for grounding.
+- **Error rate:** taken as 3 to 5 percent by direction. The `coldStart` switch
+  remains in the code so the assumption can be replaced with a measurement
+  without a rewrite, and the audit sample keeps measuring what the gate lets
+  through either way.
+- **UI reference:** beautifului.dev, copy-paste components aimed at
+  human-in-the-loop approval flows. Components are dropped into the Next.js app
+  rather than installed, so the review screen is built on Tailwind primitives
+  they compose with.
