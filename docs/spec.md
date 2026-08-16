@@ -115,3 +115,17 @@ Therefore:
   human-in-the-loop approval flows. Components are dropped into the Next.js app
   rather than installed, so the review screen is built on Tailwind primitives
   they compose with.
+
+## Measuring against the real model
+
+`npm run live` runs the ten fixtures through Gemini for real and reports
+per-field accuracy against known ground truth, split digital versus scanned.
+
+Read the two splits separately. They are different problems. The digital half
+tests whether the model reads a clean text-bearing PDF. The scanned half tests
+grounding against OCR output, and only that half is expected to generate review
+traffic from noise rather than from genuine error.
+
+What the run cannot tell you is whether the auto-approve gate is safe. Ten
+documents cannot support a threshold. That measurement comes from the
+`correction` table once a few hundred of your own invoices have been reviewed.

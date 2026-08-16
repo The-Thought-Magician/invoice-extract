@@ -1,0 +1,1747 @@
+{
+  "summary": {
+    "model": "gemini-2.5-flash",
+    "runsPerDocument": 3,
+    "documents": 10,
+    "failedDocuments": 0,
+    "routeAsExpected": 10,
+    "fieldAccuracy": {
+      "overall": {
+        "correct": 119,
+        "total": 120,
+        "rate": 0.9916666666666667
+      },
+      "digital": {
+        "correct": 60,
+        "total": 60,
+        "rate": 1
+      },
+      "scanned": {
+        "correct": 59,
+        "total": 60,
+        "rate": 0.9833333333333333
+      }
+    },
+    "reviewRate": 0.7,
+    "perField": {
+      "supplierGstin": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 2,
+        "disagreed": 0
+      },
+      "recipientGstin": {
+        "correct": 9,
+        "total": 10,
+        "rate": 0.9,
+        "ungrounded": 2,
+        "disagreed": 0
+      },
+      "invoiceNumber": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 2,
+        "disagreed": 0
+      },
+      "invoiceDate": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "placeOfSupplyStateCode": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "taxableValue": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "cgstAmount": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "sgstAmount": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "igstAmount": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "cessAmount": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      },
+      "totalValue": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 1
+      },
+      "hsn": {
+        "correct": 10,
+        "total": 10,
+        "rate": 1,
+        "ungrounded": 0,
+        "disagreed": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "slug": "01-clean-intra-state",
+      "scanned": false,
+      "textLayerSource": "embedded",
+      "textLayerLength": 1575,
+      "seconds": 0.1,
+      "route": "auto_approve",
+      "expectedRoute": "auto_approve",
+      "routeAsExpected": true,
+      "reasons": [
+        "all deterministic checks passed and every field is grounded"
+      ],
+      "findings": [],
+      "expectedFindings": [],
+      "fields": {
+        "supplierGstin": {
+          "truth": "27AAPFU0939F1ZV",
+          "got": "27AAPFU0939F1ZV",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27AAPFU0939F1ZV",
+            "27AAPFU0939F1ZV",
+            "27AAPFU0939F1ZV"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "27AAGCB7383J1Z8",
+          "got": "27AAGCB7383J1Z8",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27AAGCB7383J1Z8",
+            "27AAGCB7383J1Z8",
+            "27AAGCB7383J1Z8"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "INV/2026/0042",
+          "got": "INV/2026/0042",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "INV/2026/0042",
+            "INV/2026/0042",
+            "INV/2026/0042"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-07-15",
+          "got": "2026-07-15",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-07-15",
+            "2026-07-15",
+            "2026-07-15"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "27",
+          "got": "27",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27",
+            "27",
+            "27"
+          ]
+        },
+        "taxableValue": {
+          "truth": "1000.00",
+          "got": "1000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "1000.00",
+            "1000.00",
+            "1000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "90.00",
+          "got": "90.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "90.00",
+            "90.00",
+            "90.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "90.00",
+          "got": "90.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "90.00",
+            "90.00",
+            "90.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "1180.00",
+          "got": "1180.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "1180.00",
+            "1180.00",
+            "1180.00"
+          ]
+        },
+        "hsn": {
+          "truth": "998314",
+          "got": "998314",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "998314",
+            "998314",
+            "998314"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "02-clean-inter-state",
+      "scanned": false,
+      "textLayerSource": "embedded",
+      "textLayerLength": 1453,
+      "seconds": 0.1,
+      "route": "auto_approve",
+      "expectedRoute": "auto_approve",
+      "routeAsExpected": true,
+      "reasons": [
+        "all deterministic checks passed and every field is grounded"
+      ],
+      "findings": [],
+      "expectedFindings": [],
+      "fields": {
+        "supplierGstin": {
+          "truth": "29AAGCB7383J1Z4",
+          "got": "29AAGCB7383J1Z4",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "29AAGCB7383J1Z4",
+            "29AAGCB7383J1Z4",
+            "29AAGCB7383J1Z4"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "07AABCS1429B1ZW",
+          "got": "07AABCS1429B1ZW",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "07AABCS1429B1ZW",
+            "07AABCS1429B1ZW",
+            "07AABCS1429B1ZW"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "BC-2026-0117",
+          "got": "BC-2026-0117",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "BC-2026-0117",
+            "BC-2026-0117",
+            "BC-2026-0117"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-06-02",
+          "got": "2026-06-02",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-06-02",
+            "2026-06-02",
+            "2026-06-02"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "07",
+          "got": "07",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "07",
+            "07",
+            "07"
+          ]
+        },
+        "taxableValue": {
+          "truth": "37000.00",
+          "got": "37000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "37000.00",
+            "37000.00",
+            "37000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "6660.00",
+          "got": "6660.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "6660.00",
+            "6660.00",
+            "6660.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "43660.00",
+          "got": "43660.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "43660.00",
+            "43660.00",
+            "43660.00"
+          ]
+        },
+        "hsn": {
+          "truth": "8483",
+          "got": "8483",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "8483",
+            "8483",
+            "8483"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "03-five-percent-slab",
+      "scanned": false,
+      "textLayerSource": "embedded",
+      "textLayerLength": 1519,
+      "seconds": 0.1,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "totalValue: independent extraction runs disagreed"
+      ],
+      "findings": [],
+      "expectedFindings": [],
+      "fields": {
+        "supplierGstin": {
+          "truth": "33AACCN2082N1ZD",
+          "got": "33AACCN2082N1ZD",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "33AACCN2082N1ZD",
+            "33AACCN2082N1ZD",
+            "33AACCN2082N1ZD"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "33AACCN2082N1ZD",
+          "got": "33AACCN2082N1ZD",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "33AACCN2082N1ZD",
+            "33AACCN2082N1ZD",
+            "33AACCN2082N1ZD"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "NF/26-27/318",
+          "got": "NF/26-27/318",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "NF/26-27/318",
+            "NF/26-27/318",
+            "NF/26-27/318"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-05-21",
+          "got": "2026-05-21",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-05-21",
+            "2026-05-21",
+            "2026-05-21"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "33",
+          "got": "33",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "33",
+            "33",
+            "33"
+          ]
+        },
+        "taxableValue": {
+          "truth": "12400.00",
+          "got": "12400.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "12400.00",
+            "12400.00",
+            "12400.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "310.00",
+          "got": "310.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "310.00",
+            "310.00",
+            "310.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "310.00",
+          "got": "310.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "310.00",
+            "310.00",
+            "310.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "13020.00",
+          "got": "13020.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": false,
+          "samples": [
+            "13020.00",
+            "13020.00",
+            "13200.00"
+          ]
+        },
+        "hsn": {
+          "truth": "0904",
+          "got": "0904",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0904",
+            "0904",
+            "0904"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "04-invoice-number-too-long",
+      "scanned": false,
+      "textLayerSource": "embedded",
+      "textLayerLength": 1528,
+      "seconds": 0.1,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "invoiceNumber: Rule 46(b) caps the invoice number at 16 characters; got 24"
+      ],
+      "findings": [
+        "INVOICE_NUMBER_TOO_LONG"
+      ],
+      "expectedFindings": [
+        "INVOICE_NUMBER_TOO_LONG"
+      ],
+      "fields": {
+        "supplierGstin": {
+          "truth": "06AAACH0850J1ZU",
+          "got": "06AAACH0850J1ZU",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "06AAACH0850J1ZU",
+            "06AAACH0850J1ZU",
+            "06AAACH0850J1ZU"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "06AAACH0850J1ZU",
+          "got": "06AAACH0850J1ZU",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "06AAACH0850J1ZU",
+            "06AAACH0850J1ZU",
+            "06AAACH0850J1ZU"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "HEW/GGN/2026-2027/000891",
+          "got": "HEW/GGN/2026-2027/000891",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "HEW/GGN/2026-2027/000891",
+            "HEW/GGN/2026-2027/000891",
+            "HEW/GGN/2026-2027/000891"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-04-30",
+          "got": "2026-04-30",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-04-30",
+            "2026-04-30",
+            "2026-04-30"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "06",
+          "got": "06",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "06",
+            "06",
+            "06"
+          ]
+        },
+        "taxableValue": {
+          "truth": "9000.00",
+          "got": "9000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "9000.00",
+            "9000.00",
+            "9000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "810.00",
+          "got": "810.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "810.00",
+            "810.00",
+            "810.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "810.00",
+          "got": "810.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "810.00",
+            "810.00",
+            "810.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "10620.00",
+          "got": "10620.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "10620.00",
+            "10620.00",
+            "10620.00"
+          ]
+        },
+        "hsn": {
+          "truth": "7318",
+          "got": "7318",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "7318",
+            "7318",
+            "7318"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "05-total-mismatch",
+      "scanned": false,
+      "textLayerSource": "embedded",
+      "textLayerLength": 1560,
+      "seconds": 0.1,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "totalValue: taxable plus taxes does not equal the invoice total"
+      ],
+      "findings": [
+        "TOTAL_MISMATCH"
+      ],
+      "expectedFindings": [
+        "TOTAL_MISMATCH"
+      ],
+      "fields": {
+        "supplierGstin": {
+          "truth": "19AABCT3518Q1ZT",
+          "got": "19AABCT3518Q1ZT",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "19AABCT3518Q1ZT",
+            "19AABCT3518Q1ZT",
+            "19AABCT3518Q1ZT"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "19AABCT3518Q1ZT",
+          "got": "19AABCT3518Q1ZT",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "19AABCT3518Q1ZT",
+            "19AABCT3518Q1ZT",
+            "19AABCT3518Q1ZT"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "TS/2026/0771",
+          "got": "TS/2026/0771",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "TS/2026/0771",
+            "TS/2026/0771",
+            "TS/2026/0771"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-07-01",
+          "got": "2026-07-01",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-07-01",
+            "2026-07-01",
+            "2026-07-01"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "19",
+          "got": "19",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "19",
+            "19",
+            "19"
+          ]
+        },
+        "taxableValue": {
+          "truth": "60000.00",
+          "got": "60000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "60000.00",
+            "60000.00",
+            "60000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "5400.00",
+          "got": "5400.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "5400.00",
+            "5400.00",
+            "5400.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "5400.00",
+          "got": "5400.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "5400.00",
+            "5400.00",
+            "5400.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "71800.00",
+          "got": "71800.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "71800.00",
+            "71800.00",
+            "71800.00"
+          ]
+        },
+        "hsn": {
+          "truth": "998313",
+          "got": "998313",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "998313",
+            "998313",
+            "998313"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "06-scan-clean-intra-state",
+      "scanned": true,
+      "textLayerSource": "ocr",
+      "textLayerLength": 551,
+      "seconds": 4.2,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "invoiceNumber: not confirmed present in the OCR text layer"
+      ],
+      "findings": [],
+      "expectedFindings": [],
+      "fields": {
+        "supplierGstin": {
+          "truth": "27AAACR5055K1Z7",
+          "got": "27AAACR5055K1Z7",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27AAACR5055K1Z7",
+            "27AAACR5055K1Z7",
+            "27AAACR5055K1Z7"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "27AAPFU0939F1ZV",
+          "got": "27AAPFU0939F1ZV",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27AAPFU0939F1ZV",
+            "27AAPFU0939F1ZV",
+            "27AAPFU0939F1ZV"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "RI-2026-0208",
+          "got": "RI-2026-0208",
+          "correct": true,
+          "grounded": false,
+          "unanimous": true,
+          "samples": [
+            "RI-2026-0208",
+            "RI-2026-0208",
+            "RI-2026-0208"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-06-18",
+          "got": "2026-06-18",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-06-18",
+            "2026-06-18",
+            "2026-06-18"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "27",
+          "got": "27",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27",
+            "27",
+            "27"
+          ]
+        },
+        "taxableValue": {
+          "truth": "22400.00",
+          "got": "22400.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "22400.00",
+            "22400.00",
+            "22400.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "2016.00",
+          "got": "2016.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2016.00",
+            "2016.00",
+            "2016.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "2016.00",
+          "got": "2016.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2016.00",
+            "2016.00",
+            "2016.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "26432.00",
+          "got": "26432.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "26432.00",
+            "26432.00",
+            "26432.00"
+          ]
+        },
+        "hsn": {
+          "truth": "8544",
+          "got": "8544",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "8544",
+            "8544",
+            "8544"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "07-scan-clean-inter-state",
+      "scanned": true,
+      "textLayerSource": "ocr",
+      "textLayerLength": 543,
+      "seconds": 3.1,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "recipientGstin: GSTIN failed structural or check-digit verification",
+        "recipientGstin: not confirmed present in the OCR text layer"
+      ],
+      "findings": [
+        "RECIPIENT_GSTIN_INVALID"
+      ],
+      "expectedFindings": [],
+      "fields": {
+        "supplierGstin": {
+          "truth": "36AADCB2923M1ZM",
+          "got": "36AADCB2923M1ZM",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "36AADCB2923M1ZM",
+            "36AADCB2923M1ZM",
+            "36AADCB2923M1ZM"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "27AAGCB7383J1Z8",
+          "got": "27AAGCB7384J1Z8",
+          "correct": false,
+          "grounded": false,
+          "unanimous": true,
+          "samples": [
+            "27AAGCB7384J1Z8",
+            "27AAGCB7384J1Z8",
+            "27AAGCB7384J1Z8"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "BCL/26/1442",
+          "got": "BCL/26/1442",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "BCL/26/1442",
+            "BCL/26/1442",
+            "BCL/26/1442"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-07-09",
+          "got": "2026-07-09",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-07-09",
+            "2026-07-09",
+            "2026-07-09"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "27",
+          "got": "27",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "27",
+            "27",
+            "27"
+          ]
+        },
+        "taxableValue": {
+          "truth": "55800.00",
+          "got": "55800.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "55800.00",
+            "55800.00",
+            "55800.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "10044.00",
+          "got": "10044.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "10044.00",
+            "10044.00",
+            "10044.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "65844.00",
+          "got": "65844.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "65844.00",
+            "65844.00",
+            "65844.00"
+          ]
+        },
+        "hsn": {
+          "truth": "6907",
+          "got": "6907",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "6907",
+            "6907",
+            "6907"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "08-scan-wrong-tax-head",
+      "scanned": true,
+      "textLayerSource": "ocr",
+      "textLayerLength": 547,
+      "seconds": 3.6,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "igstAmount: intra-state supply charged IGST",
+        "supplierGstin: not confirmed present in the OCR text layer"
+      ],
+      "findings": [
+        "WRONG_TAX_HEAD"
+      ],
+      "expectedFindings": [
+        "WRONG_TAX_HEAD"
+      ],
+      "fields": {
+        "supplierGstin": {
+          "truth": "29AAACI1195H1ZI",
+          "got": "29AAACI1195H1ZI",
+          "correct": true,
+          "grounded": false,
+          "unanimous": true,
+          "samples": [
+            "29AAACI1195H1ZI",
+            "29AAACI1195H1ZI",
+            "29AAACI1195H1ZI"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "29AAGCB7383J1Z4",
+          "got": "29AAGCB7383J1Z4",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "29AAGCB7383J1Z4",
+            "29AAGCB7383J1Z4",
+            "29AAGCB7383J1Z4"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "IC/2026/0654",
+          "got": "IC/2026/0654",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "IC/2026/0654",
+            "IC/2026/0654",
+            "IC/2026/0654"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-05-08",
+          "got": "2026-05-08",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-05-08",
+            "2026-05-08",
+            "2026-05-08"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "29",
+          "got": "29",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "29",
+            "29",
+            "29"
+          ]
+        },
+        "taxableValue": {
+          "truth": "84000.00",
+          "got": "84000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "84000.00",
+            "84000.00",
+            "84000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "15120.00",
+          "got": "15120.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "15120.00",
+            "15120.00",
+            "15120.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "99120.00",
+          "got": "99120.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "99120.00",
+            "99120.00",
+            "99120.00"
+          ]
+        },
+        "hsn": {
+          "truth": "2815",
+          "got": "2815",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2815",
+            "2815",
+            "2815"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "09-scan-bad-gstin-checkdigit",
+      "scanned": true,
+      "textLayerSource": "ocr",
+      "textLayerLength": 544,
+      "seconds": 2.4,
+      "route": "review",
+      "expectedRoute": "review",
+      "routeAsExpected": true,
+      "reasons": [
+        "supplierGstin: GSTIN failed structural or check-digit verification",
+        "supplierGstin: not confirmed present in the OCR text layer",
+        "recipientGstin: not confirmed present in the OCR text layer"
+      ],
+      "findings": [
+        "SUPPLIER_GSTIN_INVALID"
+      ],
+      "expectedFindings": [
+        "SUPPLIER_GSTIN_INVALID"
+      ],
+      "fields": {
+        "supplierGstin": {
+          "truth": "08AAECP4653R1ZQ",
+          "got": "08AAECP4653R1ZQ",
+          "correct": true,
+          "grounded": false,
+          "unanimous": true,
+          "samples": [
+            "08AAECP4653R1ZQ",
+            "08AAECP4653R1ZQ",
+            "08AAECP4653R1ZQ"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "08AAECP4653R1ZP",
+          "got": "08AAECP4653R1ZP",
+          "correct": true,
+          "grounded": false,
+          "unanimous": true,
+          "samples": [
+            "08AAECP4653R1ZP",
+            "08AAECP4653R1ZP",
+            "08AAECP4653R1ZP"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": "PE/2026/0093",
+          "got": "PE/2026/0093",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "PE/2026/0093",
+            "PE/2026/0093",
+            "PE/2026/0093"
+          ]
+        },
+        "invoiceDate": {
+          "truth": "2026-04-12",
+          "got": "2026-04-12",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-04-12",
+            "2026-04-12",
+            "2026-04-12"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "08",
+          "got": "08",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "08",
+            "08",
+            "08"
+          ]
+        },
+        "taxableValue": {
+          "truth": "22800.00",
+          "got": "22800.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "22800.00",
+            "22800.00",
+            "22800.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "2052.00",
+          "got": "2052.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2052.00",
+            "2052.00",
+            "2052.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "2052.00",
+          "got": "2052.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2052.00",
+            "2052.00",
+            "2052.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "26904.00",
+          "got": "26904.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "26904.00",
+            "26904.00",
+            "26904.00"
+          ]
+        },
+        "hsn": {
+          "truth": "7326",
+          "got": "7326",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "7326",
+            "7326",
+            "7326"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "10-scan-no-invoice-number",
+      "scanned": true,
+      "textLayerSource": "ocr",
+      "textLayerLength": 523,
+      "seconds": 2.3,
+      "route": "reject",
+      "expectedRoute": "reject",
+      "routeAsExpected": true,
+      "reasons": [
+        "invoiceNumber: Rule 46 requires invoiceNumber"
+      ],
+      "findings": [
+        "MISSING_INVOICE_NUMBER"
+      ],
+      "expectedFindings": [
+        "MISSING_INVOICE_NUMBER"
+      ],
+      "fields": {
+        "supplierGstin": {
+          "truth": "24AAACC1206D1ZM",
+          "got": "24AAACC1206D1ZM",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "24AAACC1206D1ZM",
+            "24AAACC1206D1ZM",
+            "24AAACC1206D1ZM"
+          ]
+        },
+        "recipientGstin": {
+          "truth": "24AAACC1206D1ZM",
+          "got": "24AAACC1206D1ZM",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "24AAACC1206D1ZM",
+            "24AAACC1206D1ZM",
+            "24AAACC1206D1ZM"
+          ]
+        },
+        "invoiceNumber": {
+          "truth": null,
+          "got": null,
+          "correct": true,
+          "grounded": "not-attempted",
+          "unanimous": true,
+          "samples": []
+        },
+        "invoiceDate": {
+          "truth": "2026-06-25",
+          "got": "2026-06-25",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "2026-06-25",
+            "2026-06-25",
+            "2026-06-25"
+          ]
+        },
+        "placeOfSupplyStateCode": {
+          "truth": "24",
+          "got": "24",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "24",
+            "24",
+            "24"
+          ]
+        },
+        "taxableValue": {
+          "truth": "34000.00",
+          "got": "34000.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "34000.00",
+            "34000.00",
+            "34000.00"
+          ]
+        },
+        "cgstAmount": {
+          "truth": "3060.00",
+          "got": "3060.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "3060.00",
+            "3060.00",
+            "3060.00"
+          ]
+        },
+        "sgstAmount": {
+          "truth": "3060.00",
+          "got": "3060.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "3060.00",
+            "3060.00",
+            "3060.00"
+          ]
+        },
+        "igstAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "cessAmount": {
+          "truth": "0.00",
+          "got": "0.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "0.00",
+            "0.00",
+            "0.00"
+          ]
+        },
+        "totalValue": {
+          "truth": "40120.00",
+          "got": "40120.00",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "40120.00",
+            "40120.00",
+            "40120.00"
+          ]
+        },
+        "hsn": {
+          "truth": "4819",
+          "got": "4819",
+          "correct": true,
+          "grounded": true,
+          "unanimous": true,
+          "samples": [
+            "4819",
+            "4819",
+            "4819"
+          ]
+        }
+      }
+    }
+  ]
+}

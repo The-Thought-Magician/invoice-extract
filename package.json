@@ -7,6 +7,11 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "live": "tsx scripts/run-live.mjs",
+    "live:stub": "node scripts/stub-gemini.mjs"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.12"
   }
 }

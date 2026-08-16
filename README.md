@@ -62,6 +62,25 @@ both the Gemini API and arbitrary PDF downloads. Generating them turned out to
 be better test material anyway: ground truth is exact, and the failure modes the
 validation layer exists to catch are planted deliberately rather than hoped for.
 
+## Running it against the real model
+
+    GEMINI_API_KEY=... npm run live
+
+Puts all ten fixtures through the real pipeline: real OCR, three real Gemini
+runs each, real validation and routing. Prints per-field accuracy against known
+ground truth, split by digital versus scanned, and writes
+`fixtures/live-report.json`.
+
+The runner itself was verified end to end against a local stand-in for the API,
+so the only unproven part when you supply a key is Gemini's own reading:
+
+    npm run live:stub &
+    GEMINI_API_KEY=stub GEMINI_ENDPOINT=http://127.0.0.1:3199/v1beta npm run live
+
+Ten documents is a smoke test, not the measurement that opens the auto-approve
+gate. That one comes from the `correction` table, on your own invoices, at a few
+hundred documents. See ADR 0002.
+
 ## Status
 
 Built and tested: validation, routing, pipeline, the Gemini adapter, the OCR
