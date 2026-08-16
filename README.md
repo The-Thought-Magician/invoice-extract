@@ -90,6 +90,11 @@ Not built: authentication, object storage, a scheduled worker process, line
 items (v2), and the threshold-fitting script that would let `COLD_START` be
 turned off.
 
+The Python implementation this started as lives in `.bak/`. `packages/core` has
+carried validation, routing and GSTIN since the TypeScript port, so those
+modules and their pytest suite were dead. `fixtures/generate.py` is still live:
+it is the only thing that builds the corpus.
+
 ## Background
 
 - `CLAUDE.md` — start here if you are an agent or new to the repo
