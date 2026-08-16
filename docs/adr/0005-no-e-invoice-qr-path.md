@@ -1,4 +1,4 @@
-# 0005 — No e-invoice QR verification path
+# 0005: No e-invoice QR verification path
 
 ## Status
 Accepted

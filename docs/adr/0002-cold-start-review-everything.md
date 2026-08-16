@@ -1,4 +1,4 @@
-# 0002 — Review everything until the error rate is measured
+# 0002: Review everything until the error rate is measured
 
 ## Status
 Accepted

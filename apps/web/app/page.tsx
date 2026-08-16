@@ -56,20 +56,20 @@ export default async function Home() {
                       </a>
                     </td>
                     <td className="px-4 py-2.5 font-mono text-[12px]">
-                      {invoice.supplier_gstin ?? "—"}
+                      {invoice.supplier_gstin ?? "-"}
                     </td>
                     <td className="px-4 py-2.5 font-mono text-[12px]">
-                      {invoice.invoice_number ?? "—"}
+                      {invoice.invoice_number ?? "-"}
                     </td>
                     <td className="px-4 py-2.5">{formatDate(invoice.invoice_date)}</td>
                     <td className="px-4 py-2.5 text-right font-mono text-[12px]">
                       {invoice.total_value_paise != null
                         ? formatPaiseString(invoice.total_value_paise)
-                        : "—"}
+                        : "-"}
                     </td>
                     <td className="px-4 py-2.5" style={{ color: "var(--muted)" }}>
                       {invoice.had_text_layer === null
-                        ? "—"
+                        ? "-"
                         : invoice.had_text_layer
                           ? "digital"
                           : "scan"}
@@ -107,7 +107,7 @@ function tally(invoices: InvoiceRow[]): Record<string, number> {
  * how an Indian invoice prints it and how the reviewer will read the page.
  */
 function formatDate(value: unknown): string {
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined) return "-";
   // isoDate reads the local getters. toISOString would shift the day backwards
   // for every user east of UTC, because a `date` arrives as local midnight.
   const iso = value instanceof Date ? isoDate(value) : String(value).slice(0, 10);

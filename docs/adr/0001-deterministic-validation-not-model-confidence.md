@@ -1,4 +1,4 @@
-# 0001 — Deterministic validation replaces self-reported model confidence
+# 0001: Deterministic validation replaces self-reported model confidence
 
 ## Status
 Accepted

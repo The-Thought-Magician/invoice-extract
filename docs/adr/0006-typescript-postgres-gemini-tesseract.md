@@ -1,4 +1,4 @@
-# 0006 — TypeScript, Postgres, Gemini for extraction, Tesseract for grounding
+# 0006: TypeScript, Postgres, Gemini for extraction, Tesseract for grounding
 
 ## Status
 Accepted

@@ -1,4 +1,4 @@
-# 0003 — Header fields only in v1
+# 0003: Header fields only in v1
 
 ## Status
 Accepted

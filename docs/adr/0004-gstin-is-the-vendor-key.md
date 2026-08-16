@@ -1,4 +1,4 @@
-# 0004 — GSTIN is the vendor key; the name is display only
+# 0004: GSTIN is the vendor key; the name is display only
 
 ## Status
 Accepted

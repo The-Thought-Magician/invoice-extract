@@ -4,7 +4,7 @@
  * Every case here is a defect that reached the running application once. The
  * shared shape of most of them: a rule the validation layer treats as "show a
  * human" was also encoded as a storage constraint, so the write failed and the
- * invoice became `failed` instead of reviewable — hiding exactly the violation
+ * invoice became `failed` instead of reviewable, hiding exactly the violation
  * the tool exists to surface.
  */
 
@@ -311,7 +311,7 @@ describe("input at the edges", () => {
 describe("isoDate", () => {
   it("reads the calendar day the driver parsed, not the UTC one", () => {
     // Both drivers build a `date` at local midnight. East of UTC that is the
-    // previous day in UTC terms, so toISOString renders 15/08 as 14/08 — and on
+    // previous day in UTC terms, so toISOString renders 15/08 as 14/08, and on
     // the review screen the shifted value seeds the form, so a reviewer
     // confirming an unchanged field labels the wrong date.
     const localMidnight = new Date(2026, 6, 15, 0, 0, 0);

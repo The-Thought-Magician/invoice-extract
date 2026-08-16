@@ -61,8 +61,8 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
           ? formatPaiseString(String(raw))
           : raw instanceof Date
             ? // Local getters, not toISOString: this value seeds the review
-              // form, so a UTC shift would have the reviewer confirm — and
-              // therefore label — a date one day earlier than the document's.
+              // form, so a UTC shift would have the reviewer confirm, and
+              // therefore label, a date one day earlier than the document's.
               isoDate(raw)
             : String(raw);
 

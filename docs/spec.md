@@ -1,4 +1,4 @@
-# Invoice extraction — v1 spec
+# Invoice extraction: v1 spec
 
 Derived from a grilling session. Every decision below has a recorded reason;
 where a decision is still open it is marked OPEN and must be settled before the

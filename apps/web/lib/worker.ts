@@ -63,7 +63,7 @@ let cachedConfig: WorkerConfig | null = null;
  * Built once per process.
  *
  * Rebuilding it per request re-read the recorded-runs file synchronously on the
- * event loop every time, and handed each call a fresh extractor — which resets
+ * event loop every time, and handed each call a fresh extractor, which resets
  * the replay cursor, so a sequence of recorded answers restarted on every
  * invoice instead of advancing.
  */

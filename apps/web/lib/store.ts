@@ -96,7 +96,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
  * What to actually put in the column for a text-ish field.
  *
  * Every one of these columns is `text` and takes the extracted string verbatim
- * — except `invoice_date`, which is a real `date`. Postgres rejects anything
+ * except `invoice_date`, which is a real `date`. Postgres rejects anything
  * that is not a date, so handing it "31/03/2024" throws 22008 and the invoice
  * dies as 'failed'. That is the wrong outcome: an unparseable date is already
  * an Error-severity finding, which means "show a human", not "refuse the row".
@@ -143,8 +143,8 @@ export async function claimNextQueued(): Promise<{ id: string; storage_key: stri
 /**
  * Return invoices stranded in 'processing' to the queue.
  *
- * A worker that dies mid-extraction — an OOM, a container restart, a Gemini
- * call that never returns — leaves its claim set forever. The invoice is then
+ * A worker that dies mid-extraction (an OOM, a container restart, a Gemini
+ * call that never returns) leaves its claim set forever. The invoice is then
  * invisible to the queue and to the review list both, so it is simply lost.
  * Anything claimed longer ago than one run could plausibly take is assumed
  * dead. Safe to run repeatedly: a live worker's row is younger than the cutoff.
@@ -302,7 +302,7 @@ export function computeDuplicateKey(extraction: InvoiceExtraction): string | nul
  *
  * The `status <> 'rejected'` predicate is not a filter for its own sake: it
  * matches the partial unique index, which is the only thing that makes this a
- * lookup rather than a sequential scan. It also names the right row — a
+ * lookup rather than a sequential scan. It also names the right row, because a
  * previously rejected invoice is not what the live one collides with, because
  * the index excludes it from the uniqueness check in the first place.
  */

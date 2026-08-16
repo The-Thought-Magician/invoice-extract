@@ -49,18 +49,18 @@ Read `CONTEXT.md` first for the vocabulary.
 
 ## Fixtures
 
-`fixtures/generate.py` builds ten Indian GST invoices, five digital and five
-rendered to image so they have no text layer. Each plants a specific condition:
-clean intra-state, clean inter-state, a 5 percent slab, an invoice number over
-the Rule 46(b) limit, a total that does not add up, a wrong tax head, a GSTIN
-with a bad check digit, and a document with no invoice number at all.
+`fixtures/pdfs/` holds ten Indian GST invoices, five digital and five rendered
+to image so they have no text layer. Each plants a specific condition: clean
+intra-state, clean inter-state, a 5 percent slab, an invoice number over the
+Rule 46(b) limit, a total that does not add up, a wrong tax head, a GSTIN with a
+bad check digit, and a document with no invoice number at all. Ground truth for
+every one is in `fixtures/expected.json`.
 
-    python3 fixtures/generate.py && node fixtures/record-runs.mjs
+    node fixtures/record-runs.mjs   # refresh the recorded model answers
 
-They are generated rather than collected because the build environment blocks
-both the Gemini API and arbitrary PDF downloads. Generating them turned out to
-be better test material anyway: ground truth is exact, and the failure modes the
-validation layer exists to catch are planted deliberately rather than hoped for.
+They were generated rather than collected, which turned out to be better test
+material: ground truth is exact, and the failure modes the validation layer
+exists to catch are planted deliberately rather than hoped for.
 
 ## Running it against the real model
 
@@ -90,16 +90,11 @@ Not built: authentication, object storage, a scheduled worker process, line
 items (v2), and the threshold-fitting script that would let `COLD_START` be
 turned off.
 
-The Python implementation this started as lives in `.bak/`. `packages/core` has
-carried validation, routing and GSTIN since the TypeScript port, so those
-modules and their pytest suite were dead. `fixtures/generate.py` is still live:
-it is the only thing that builds the corpus.
-
 ## Background
 
-- `CLAUDE.md` — start here if you are an agent or new to the repo
-- `CONTEXT.md` — the domain vocabulary
-- `docs/DECISION-LOG.md` — every design question asked, answered, and its consequence
-- `docs/RESEARCH.md` — the evidence behind the decisions, with sources
-- `docs/adr/` — six architecture decision records
-- `docs/spec.md` — scope and what is still open
+- `CLAUDE.md`: start here if you are an agent or new to the repo
+- `CONTEXT.md`: the domain vocabulary
+- `docs/DECISION-LOG.md`: every design question asked, answered, and its consequence
+- `docs/RESEARCH.md`: the evidence behind the decisions, with sources
+- `docs/adr/`: six architecture decision records
+- `docs/spec.md`: scope and what is still open

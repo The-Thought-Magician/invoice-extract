@@ -12,7 +12,7 @@ export const runtime = "nodejs";
  * to a Route Handler. Without these, `formData()` buffers the whole upload,
  * `arrayBuffer()` materialises each file again, and the base64 encoding for
  * Gemini makes a third copy at 4/3 the size. A single large POST is then enough
- * to exhaust the process — which presents as an unresponsive server, not as a
+ * to exhaust the process, which presents as an unresponsive server, not as a
  * rejected upload.
  */
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
