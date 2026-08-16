@@ -1,15 +1,78 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Phase = "idle" | "uploading" | "processing" | "done" | "error";
+
+/**
+ * Consecutive drain failures tolerated before the loop gives up. Without a cap
+ * a server that is down keeps the tab POSTing until it is closed.
+ */
+const MAX_CONSECUTIVE_FAILURES = 5;
 
 export function UploadPanel() {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const [message, setMessage] = useState<string>("");
+
+  // One drain loop at a time, and none at all once the panel is gone. Selecting
+  // files twice must not leave two loops racing to declare the queue empty.
+  const draining = useRef(false);
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
+
+  /**
+   * Drain the queue one invoice per request.
+   *
+   * The route processes a single invoice and returns, so the server stays
+   * answerable between them and the list fills in as the work happens. Draining
+   * everything in one request is what made the server unreachable for minutes.
+   */
+  async function drain(skipped: string) {
+    if (draining.current) return;
+    draining.current = true;
+    let failures = 0;
+
+    try {
+      while (alive.current) {
+        try {
+          const response = await fetch("/api/worker/drain", { method: "POST" });
+          if (!response.ok) throw new Error(`drain returned ${response.status}`);
+          const { processed } = (await response.json()) as { processed?: number };
+          failures = 0;
+          if (!alive.current) return;
+          router.refresh();
+          // Anything other than a positive count means the queue is empty or
+          // the response was not the shape we expect. Either way, stop.
+          if (typeof processed !== "number" || processed <= 0) break;
+        } catch {
+          failures += 1;
+          if (failures >= MAX_CONSECUTIVE_FAILURES) {
+            if (alive.current) {
+              setPhase("error");
+              setMessage("Processing stalled. Reload to retry the remaining invoices.");
+            }
+            return;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+      }
+
+      if (!alive.current) return;
+      setPhase("done");
+      setMessage(`Done.${skipped}`);
+      router.refresh();
+    } finally {
+      draining.current = false;
+    }
+  }
 
   async function submit(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -22,24 +85,22 @@ export function UploadPanel() {
 
     try {
       const response = await fetch("/api/upload", { method: "POST", body });
+      // Read `ok` before the body: an error page is not JSON, and parsing it
+      // first surfaces a parser message instead of the actual failure.
+      if (!response.ok) throw new Error(`upload failed (${response.status})`);
       const result = (await response.json()) as {
         accepted: number;
         rejected: { name: string; reason: string }[];
       };
-      if (!response.ok) throw new Error("upload failed");
-
-      // Upload returns as soon as the rows exist. Extraction happens after,
-      // which is why the person is told to come back rather than made to wait.
-      setPhase("processing");
-      setMessage(`Accepted ${result.accepted}. Reading them now.`);
-      await fetch("/api/worker/drain", { method: "POST" });
 
       const skipped = result.rejected.length
         ? ` Skipped ${result.rejected.map((r) => `${r.name} (${r.reason})`).join(", ")}.`
         : "";
-      setPhase("done");
-      setMessage(`Done.${skipped}`);
+      setPhase("processing");
+      setMessage(`Accepted ${result.accepted}. Reading them now.${skipped}`);
       router.refresh();
+
+      void drain(skipped);
     } catch (error) {
       setPhase("error");
       setMessage(error instanceof Error ? error.message : "upload failed");
@@ -78,6 +139,8 @@ export function UploadPanel() {
         <p
           data-testid="upload-status"
           data-phase={phase}
+          role="status"
+          aria-live="polite"
           className="mt-4 border-t hairline pt-3 text-[13px]"
           style={{ color: phase === "error" ? "var(--stop)" : "var(--muted)" }}
         >

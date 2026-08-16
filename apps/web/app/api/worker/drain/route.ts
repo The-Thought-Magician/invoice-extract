@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 
-import { configFromEnvironment, drainQueue } from "@/lib/worker";
+import { configFromEnvironment, processOne } from "@/lib/worker";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
 /**
- * Drain the queue.
+ * Process one queued invoice and return immediately.
  *
- * Called by the upload panel so a person watching gets a result promptly, and
- * intended to be called on a schedule in production. Safe to call
- * concurrently: claiming uses `for update skip locked`.
+ * The upload panel fires this then polls; each call processes one invoice so
+ * the server stays responsive between them. The panel re-triggers until the
+ * queue is empty.
  */
 export async function POST() {
-  const processed = await drainQueue(configFromEnvironment());
-  return NextResponse.json({ processed });
+  const config = configFromEnvironment();
+  const id = await processOne(config);
+  return NextResponse.json({ processed: id ? 1 : 0, id });
 }
