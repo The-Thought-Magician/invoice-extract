@@ -18,13 +18,6 @@ carries a signed QR code and there is no free ground truth.
     npm run --workspace @invoice-extract/web test:e2e     # 21 Playwright tests
     GEMINI_API_KEY=... npm run live                       # real model, 10 fixtures
 
-Never run `next dev` and `next build` against the same tree. They share
-`.next`, and the dev server wedges permanently once its chunks are deleted
-underneath it: the first request compiles, every later one dies in the router
-before reaching route code, so the log goes silent while the port stays open.
-It looks exactly like a hang in application code and is not. `rm -rf
-apps/web/.next` and start one server.
-
 System dependencies: `poppler-utils` and `tesseract-ocr`. No database server
 needed; without `DATABASE_URL` the app runs on PGlite, an embedded Postgres.
 
@@ -118,20 +111,26 @@ Do not reintroduce these. Each cost a debugging cycle and each has a test now.
   300. Both directions are pinned by tests. Do not "optimise" the dpi without
   measuring.
 
-## Environment constraints in the Anthropic sandbox
+## Local development
 
-If you are an agent working on this in the same cloud environment:
+System packages the OCR path needs: `poppler-utils` for `pdftotext` and
+`pdftoppm`, and `tesseract-ocr`. Without them the text-layer tests in
+`packages/adapters` fail and nothing grounds.
 
-- `generativelanguage.googleapis.com` and `aiplatform.googleapis.com` return
-  **403 at the org proxy**. `*.googleapis.com` is allowlisted for Drive paths
-  only. Gemini cannot be called. Do not look for a tunnel around this; it is a
-  deliberate network policy. `scripts/stub-gemini.mjs` exists so the pipeline
-  can still be exercised end to end.
-- Arbitrary PDF downloads are blocked, which is why `fixtures/pdfs/` were
-  generated rather than collected.
-- Chromium is preinstalled at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`.
-  Set `CHROMIUM_PATH` to it; do not run `playwright install`.
-- `git clone` over HTTPS works. The GitHub API and codeload do not.
+Without `GEMINI_API_KEY` the worker replays recorded answers from
+`fixtures/recorded-runs.json`, so the whole application runs offline. Real OCR
+still runs in that mode, so the scanned half is still exercised for real.
+`scripts/stub-gemini.mjs` stands in for the API when you want to test the live
+runner itself rather than the model.
+
+Playwright uses the system Chromium when `CHROMIUM_PATH` points at it, which
+avoids downloading a second copy.
+
+Never run `next dev` and `next build` against the same tree. They share
+`.next`, and the dev server wedges permanently once its chunks are deleted
+underneath it: the first request compiles, every later one dies in the router
+before reaching route code, so the log goes silent while the port stays open.
+It looks exactly like a hang in application code and is not.
 
 ## Where the work is
 
