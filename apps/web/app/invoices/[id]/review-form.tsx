@@ -27,9 +27,11 @@ export function ReviewForm({
   );
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function save() {
     setSaving(true);
+    setError(null);
     try {
       const response = await fetch(`/api/invoices/${invoiceId}/review`, {
         method: "POST",
@@ -41,9 +43,16 @@ export function ReviewForm({
           ),
         }),
       });
-      if (!response.ok) throw new Error("save failed");
+      if (!response.ok) {
+        // Surface why. A reviewer's corrections are the only ground truth this
+        // system has; losing them silently is worse than refusing the save.
+        const detail = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(detail?.error ?? `save failed (${response.status})`);
+      }
       setSaved(true);
       router.refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "save failed");
     } finally {
       setSaving(false);
     }
@@ -125,9 +134,21 @@ export function ReviewForm({
           >
             {saving ? "Saving" : "Confirm and save"}
           </button>
-          {saved && (
-            <span data-testid="save-confirmation" className="text-[13px]" style={{ color: "var(--ok)" }}>
-              Saved. Every field is now a labelled example.
+          <span role="status" aria-live="polite" className="text-[13px]">
+            {saved && (
+              <span data-testid="save-confirmation" style={{ color: "var(--ok)" }}>
+                Saved. Every field is now a labelled example.
+              </span>
+            )}
+          </span>
+          {error && (
+            <span
+              data-testid="save-error"
+              role="alert"
+              className="text-[13px]"
+              style={{ color: "var(--stop)" }}
+            >
+              Not saved: {error}
             </span>
           )}
         </div>

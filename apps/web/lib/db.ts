@@ -16,11 +16,14 @@ export interface QueryResult<Row> {
   rows: Row[];
 }
 
-export interface Database {
+export interface Queryable {
   query<Row = Record<string, unknown>>(
     sql: string,
     parameters?: readonly unknown[],
   ): Promise<QueryResult<Row>>;
+}
+
+export interface Database extends Queryable {
   /**
    * Run a script containing several statements. Separate from `query` because
    * a parameterised statement can only ever be one command; PGlite rejects a
@@ -28,6 +31,43 @@ export interface Database {
    * SQL injection if it did not.
    */
   exec(sql: string): Promise<void>;
+  /**
+   * Run `body` inside a transaction, committing on return and rolling back on
+   * throw.
+   *
+   * Writes here are multi-statement and must not half-apply. A review inserts
+   * correction rows and then updates the invoice; without this, a rejected
+   * update leaves the labelled set holding labels for a change that was never
+   * made, and a retry duplicates them. Since the labelled set is the only route
+   * to opening the auto-approve gate (ADR 0002), corrupting it is worse than
+   * failing the write.
+   */
+  transaction<T>(body: (tx: Queryable) => Promise<T>): Promise<T>;
+}
+
+/**
+ * Bracket the body in begin/commit/rollback on a client that is ours alone.
+ *
+ * The caller must guarantee exclusivity. Issuing these statements on a
+ * connection someone else is also using interleaves two transactions on one
+ * backend: one caller's `commit` commits the other's half-written rows, and a
+ * constraint violation in either leaves the shared session aborted, so every
+ * later query fails with 25P02 until something rolls back.
+ */
+async function runTransaction<T>(
+  client: Queryable,
+  body: (tx: Queryable) => Promise<T>,
+): Promise<T> {
+  await client.query("begin");
+  try {
+    const result = await body(client);
+    await client.query("commit");
+    return result;
+  } catch (error) {
+    // A failed rollback must not mask the error that caused it.
+    await client.query("rollback").catch(() => {});
+    throw error;
+  }
 }
 
 /**
@@ -70,6 +110,19 @@ async function connect(): Promise<Database> {
       exec: async (sql) => {
         await pool.query(sql);
       },
+      // One client for the whole transaction. Running begin/commit through the
+      // pool would let the statements land on different connections.
+      transaction: async (body) => {
+        const client = await pool.connect();
+        try {
+          return await runTransaction(
+            { query: async (sql, parameters = []) => client.query(sql, [...parameters]) as never },
+            body,
+          );
+        } finally {
+          client.release();
+        }
+      },
     };
     await migrate(database);
     return database;
@@ -83,6 +136,13 @@ async function connect(): Promise<Database> {
     exec: async (sql) => {
       await pglite.exec(sql);
     },
+    // PGlite's own transaction, not the begin/commit helper. There is exactly
+    // one backend here, so two concurrent drains issuing their own begin/commit
+    // would interleave on it. This serialises them; the helper cannot.
+    transaction: (body) =>
+      pglite.transaction(async (tx) =>
+        body({ query: async (sql, parameters = []) => tx.query(sql, [...parameters]) as never }),
+      ) as Promise<never>,
   };
   await migrate(database);
   return database;

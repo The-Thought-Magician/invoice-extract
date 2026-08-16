@@ -56,6 +56,8 @@ export interface GeminiOptions {
   readonly temperature?: number;
   readonly fetchImpl?: typeof fetch;
   readonly maxRetries?: number;
+  /** Per-attempt ceiling. A stalled connection must not hang the worker. */
+  readonly timeoutMs?: number;
 }
 
 export class GeminiExtractionError extends Error {
@@ -74,6 +76,7 @@ export class GeminiFieldExtractor implements FieldExtractor {
   private readonly temperature: number;
   private readonly fetchImpl: typeof fetch;
   private readonly maxRetries: number;
+  private readonly timeoutMs: number;
 
   constructor(options: GeminiOptions) {
     if (!options.apiKey) throw new GeminiExtractionError("Gemini API key is required");
@@ -83,6 +86,7 @@ export class GeminiFieldExtractor implements FieldExtractor {
     this.temperature = options.temperature ?? 0.4;
     this.fetchImpl = options.fetchImpl ?? fetch;
     this.maxRetries = options.maxRetries ?? 2;
+    this.timeoutMs = options.timeoutMs ?? 120_000;
   }
 
   async extract(pdf: Uint8Array): Promise<ExtractionRun> {
@@ -117,6 +121,10 @@ export class GeminiFieldExtractor implements FieldExtractor {
             "x-goog-api-key": this.apiKey,
           },
           body: JSON.stringify(body),
+          // A connection that stalls after the handshake never rejects on its
+          // own, which would hang the drain and strand the invoice mid-claim.
+          // An abort surfaces as a retryable error like any other.
+          signal: AbortSignal.timeout(this.timeoutMs),
         });
 
         if (response.status === 429 || response.status >= 500) {

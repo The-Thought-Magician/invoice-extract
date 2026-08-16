@@ -22,6 +22,17 @@ import type { TextLayerReader } from "@invoice-extract/core";
 const run = promisify(execFile);
 
 /**
+ * Wall-clock ceiling on each external tool.
+ *
+ * Without one, a PDF that makes tesseract or poppler spin never settles: the
+ * drain request never responds, and the invoice stays claimed as 'processing'
+ * with nothing to release it. Generous enough for a slow scan at 300 dpi;
+ * exceeding it means something is wrong, not merely slow. `execFile` kills the
+ * child on timeout and rejects, which the caller already treats as a failure.
+ */
+const TOOL_TIMEOUT_MS = 120_000;
+
+/**
  * Below this many characters we treat the embedded text layer as absent. A
  * scanned page often still carries a stray character or two from the scanner
  * software, which is not a text layer in any useful sense.
@@ -80,6 +91,7 @@ export class PdfTextLayerReader implements TextLayerReader {
     try {
       const { stdout } = await run("pdftotext", ["-layout", pdfPath, "-"], {
         maxBuffer: 32 * 1024 * 1024,
+        timeout: TOOL_TIMEOUT_MS,
       });
       return stdout;
     } catch {
@@ -92,6 +104,7 @@ export class PdfTextLayerReader implements TextLayerReader {
     try {
       await run("pdftoppm", ["-png", "-r", String(this.dpi), pdfPath, prefix], {
         maxBuffer: 64 * 1024 * 1024,
+        timeout: TOOL_TIMEOUT_MS,
       });
     } catch {
       return "";
@@ -107,7 +120,7 @@ export class PdfTextLayerReader implements TextLayerReader {
         const { stdout } = await run(
           "tesseract",
           [join(workingDirectory, page), "stdout", "-l", this.language, "--psm", "6"],
-          { maxBuffer: 32 * 1024 * 1024 },
+          { maxBuffer: 32 * 1024 * 1024, timeout: TOOL_TIMEOUT_MS },
         );
         texts.push(stdout);
       } catch {

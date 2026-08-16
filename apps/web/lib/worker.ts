@@ -57,7 +57,27 @@ class RecordingExtractor implements FieldExtractor {
   }
 }
 
+let cachedConfig: WorkerConfig | null = null;
+
+/**
+ * Built once per process.
+ *
+ * Rebuilding it per request re-read the recorded-runs file synchronously on the
+ * event loop every time, and handed each call a fresh extractor — which resets
+ * the replay cursor, so a sequence of recorded answers restarted on every
+ * invoice instead of advancing.
+ */
 export function configFromEnvironment(): WorkerConfig {
+  cachedConfig ??= buildConfig();
+  return cachedConfig;
+}
+
+/** Test helper: drop the memoised config so the next call re-reads the env. */
+export function resetConfig(): void {
+  cachedConfig = null;
+}
+
+function buildConfig(): WorkerConfig {
   const key = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
 

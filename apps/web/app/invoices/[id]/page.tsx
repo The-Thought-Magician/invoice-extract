@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { formatPaiseString, getInvoice, type InvoiceDetail } from "@/lib/store";
+import { formatPaiseString, getInvoice, isoDate, type InvoiceDetail } from "@/lib/store";
 
 import { StatusChip } from "../../status-chip";
 import { ReviewForm, type ReviewField } from "./review-form";
@@ -60,7 +60,10 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
         : AMOUNTS.has(name)
           ? formatPaiseString(String(raw))
           : raw instanceof Date
-            ? raw.toISOString().slice(0, 10)
+            ? // Local getters, not toISOString: this value seeds the review
+              // form, so a UTC shift would have the reviewer confirm — and
+              // therefore label — a date one day earlier than the document's.
+              isoDate(raw)
             : String(raw);
 
     const evidence = invoice.field_evidence?.[name];

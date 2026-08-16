@@ -40,6 +40,10 @@ create table invoice (
   uploaded_by     text not null,
   uploaded_at     timestamptz not null default now(),
   status          invoice_status not null default 'queued',
+  -- When a worker claimed this row. A worker that dies mid-extraction would
+  -- otherwise leave the invoice in 'processing' forever, invisible to both the
+  -- queue and the review list. See releaseStranded.
+  claimed_at      timestamptz,
   processed_at    timestamptz,
 
   -- Whether the document arrived with a usable text layer or had to be OCR'd.
@@ -49,15 +53,23 @@ create table invoice (
 
   -- Header fields. Values are the merged modal answer across runs; the raw
   -- per-run answers live in extraction_run.
-  supplier_gstin              char(15),
-  recipient_gstin             char(15),
-  -- Deliberately wider than the sixteen characters Rule 46(b) allows. An
-  -- over-long invoice number is a finding to show a reviewer, not a value to
-  -- refuse to store. A storage constraint here turns a flaggable invoice into
-  -- a failed one, which hides exactly the violation the tool exists to surface.
+  --
+  -- Every one of these is `text`, deliberately, including the ones with a known
+  -- legal width. A malformed value is a finding to show a reviewer, not a value
+  -- to refuse to store. A storage constraint here turns a flaggable invoice
+  -- into a failed one, which hides exactly the violation the tool exists to
+  -- surface: char(15) on a GSTIN defeats the mod-36 check digit, because the
+  -- OCR slip that makes the GSTIN wrong is often the same one that makes it
+  -- the wrong length. Rule 46(b)'s sixteen-character invoice number is the same
+  -- story and cost a debugging cycle already.
+  supplier_gstin              text,
+  recipient_gstin             text,
   invoice_number              text,
+  -- Parsed ISO date only. An unparseable date is left null and reported as a
+  -- finding; the raw string it came from survives in field_evidence and in
+  -- extraction_run.raw_output, so nothing is lost by not storing it here.
   invoice_date                date,
-  place_of_supply_state_code  char(2),
+  place_of_supply_state_code  text,
   taxable_value_paise         bigint,        -- integer paise, never float
   cgst_amount_paise           bigint,
   sgst_amount_paise           bigint,
@@ -86,6 +98,17 @@ create unique index invoice_duplicate_key_uniq
 create index invoice_awaiting_review_idx
   on invoice (uploaded_at)
   where status = 'awaiting_review';
+
+-- claimNextQueued runs once per document and orders by uploaded_at under a row
+-- lock. Without this it is a sequential scan plus a sort of the whole table.
+create index invoice_queued_idx
+  on invoice (uploaded_at)
+  where status = 'queued';
+
+-- Recovering rows stranded by a dead worker.
+create index invoice_processing_idx
+  on invoice (claimed_at)
+  where status = 'processing';
 
 create index invoice_supplier_idx on invoice (supplier_gstin, invoice_date desc);
 
@@ -134,6 +157,10 @@ create table correction (
 );
 
 create index correction_field_idx on correction (field_name, model, prompt_hash);
+
+-- recordReview asks whether this invoice has any incorrect field, on every
+-- review, against a table that only ever grows.
+create index correction_invoice_idx on correction (invoice_id);
 
 -- Random slice of auto-approved invoices routed to a human anyway, so the
 -- gate's false-negative rate is measured rather than assumed.

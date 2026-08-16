@@ -17,22 +17,37 @@ import {
   parsePaise,
 } from "@invoice-extract/core";
 
-import { getDatabase } from "./db";
+import { getDatabase, type Queryable } from "./db";
 
-export type InvoiceStatus =
-  | "queued"
-  | "processing"
-  | "auto_approved"
-  | "awaiting_review"
-  | "reviewed"
-  | "rejected"
-  | "failed";
+export const INVOICE_STATUSES = [
+  "queued",
+  "processing",
+  "auto_approved",
+  "awaiting_review",
+  "reviewed",
+  "rejected",
+  "failed",
+] as const;
+
+export type InvoiceStatus = (typeof INVOICE_STATUSES)[number];
+
+/**
+ * Narrow a query-string value to a status.
+ *
+ * The enum is enforced by Postgres, so an unrecognised value is a 22P02 rather
+ * than an empty result. Rejecting it here turns `?status=nonsense` into a 400
+ * instead of an unhandled 500.
+ */
+export function asInvoiceStatus(value: string | null): InvoiceStatus | null {
+  return INVOICE_STATUSES.includes(value as InvoiceStatus) ? (value as InvoiceStatus) : null;
+}
 
 export interface InvoiceRow {
   id: string;
   original_name: string;
   status: InvoiceStatus;
-  uploaded_at: string;
+  // timestamptz, like date, arrives as a JS Date from both drivers.
+  uploaded_at: Date | string;
   supplier_gstin: string | null;
   invoice_number: string | null;
   // Both drivers return a `date` column as a JS Date, not a string.
@@ -75,6 +90,25 @@ const TEXT_COLUMNS: Partial<Record<FieldName, string>> = {
   hsn: "hsn",
 };
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * What to actually put in the column for a text-ish field.
+ *
+ * Every one of these columns is `text` and takes the extracted string verbatim
+ * — except `invoice_date`, which is a real `date`. Postgres rejects anything
+ * that is not a date, so handing it "31/03/2024" throws 22008 and the invoice
+ * dies as 'failed'. That is the wrong outcome: an unparseable date is already
+ * an Error-severity finding, which means "show a human", not "refuse the row".
+ *
+ * So the column gets null and the finding does the talking. The raw string is
+ * not lost: it stays in field_evidence and in extraction_run.raw_output.
+ */
+function columnValue(name: FieldName, value: string | null): string | null {
+  if (name !== "invoiceDate") return value;
+  return value !== null && ISO_DATE.test(value) ? value : null;
+}
+
 export async function createInvoice(input: {
   storageKey: string;
   originalName: string;
@@ -96,7 +130,7 @@ export async function claimNextQueued(): Promise<{ id: string; storage_key: stri
   // `for update skip locked` is what makes more than one worker safe. Without
   // it two workers process the same invoice and bill Gemini twice for it.
   const { rows } = await database.query<{ id: string; storage_key: string }>(
-    `update invoice set status = 'processing'
+    `update invoice set status = 'processing', claimed_at = now()
      where id = (
        select id from invoice where status = 'queued'
        order by uploaded_at limit 1 for update skip locked
@@ -104,6 +138,27 @@ export async function claimNextQueued(): Promise<{ id: string; storage_key: stri
      returning id, storage_key`,
   );
   return rows[0] ?? null;
+}
+
+/**
+ * Return invoices stranded in 'processing' to the queue.
+ *
+ * A worker that dies mid-extraction — an OOM, a container restart, a Gemini
+ * call that never returns — leaves its claim set forever. The invoice is then
+ * invisible to the queue and to the review list both, so it is simply lost.
+ * Anything claimed longer ago than one run could plausibly take is assumed
+ * dead. Safe to run repeatedly: a live worker's row is younger than the cutoff.
+ */
+export async function releaseStranded(olderThanMinutes = 30): Promise<number> {
+  const database = await getDatabase();
+  const { rows } = await database.query<{ id: string }>(
+    `update invoice set status = 'queued', claimed_at = null
+     where status = 'processing'
+       and claimed_at < now() - ($1 || ' minutes')::interval
+     returning id`,
+    [String(olderThanMinutes)],
+  );
+  return rows.length;
 }
 
 export async function saveResult(input: {
@@ -145,7 +200,9 @@ export async function saveResult(input: {
     decision.route,
     decision.reasons,
     key,
-    ...Object.keys(TEXT_COLUMNS).map((name) => extraction[name as FieldName].value),
+    ...Object.keys(TEXT_COLUMNS).map((name) =>
+      columnValue(name as FieldName, extraction[name as FieldName].value),
+    ),
     ...Object.keys(AMOUNT_COLUMNS).map((name) => {
       const paise = parsePaise(extraction[name as FieldName].value);
       return paise === null ? null : paise.toString();
@@ -160,55 +217,76 @@ export async function saveResult(input: {
     (column, index) => `${column} = $${amountOffset + index}`,
   );
 
-  try {
-    await database.query(
-      `update invoice set
-         status = $2, processed_at = now(), had_text_layer = $3, text_layer = $4,
-         field_evidence = $5::jsonb, route = $6, route_reasons = $7, duplicate_key = $8,
-         ${[...textAssignments, ...amountAssignments].join(", ")}
-       where id = $1`,
-      values,
-    );
-  } catch (error) {
-    // The unique index on duplicate_key is the duplicate check. Catching the
-    // violation rather than pre-querying means two workers racing on the same
-    // invoice cannot both win.
-    if (isUniqueViolation(error)) {
-      const original = key === null ? null : await findByDuplicateKey(key, input.id);
-      await database.query(
+  // One transaction for the whole result. The invoice row, its findings and its
+  // raw runs are a single explanation of one decision; committing some of them
+  // leaves a routed invoice whose reasons belong to a previous run, which is
+  // exactly the after-the-fact explainability the schema exists to guarantee.
+  return database.transaction(async (tx) => {
+    let duplicateOf: string | null = null;
+    let finalStatus = status;
+
+    await tx.query("savepoint before_invoice_write");
+    try {
+      await tx.query(
+        `update invoice set
+           status = $2, processed_at = now(), had_text_layer = $3, text_layer = $4,
+           field_evidence = $5::jsonb, route = $6, route_reasons = $7, duplicate_key = $8,
+           ${[...textAssignments, ...amountAssignments].join(", ")}
+         where id = $1`,
+        values,
+      );
+    } catch (error) {
+      // The unique index on duplicate_key is the duplicate check. Catching the
+      // violation rather than pre-querying means two workers racing on the same
+      // invoice cannot both win.
+      if (!isUniqueViolation(error)) throw error;
+
+      // Postgres aborts the transaction on a constraint violation, so the
+      // recovery has to start from a savepoint taken before the failing write.
+      // Without one every statement after this point fails with 25P02.
+      await tx.query("rollback to savepoint before_invoice_write");
+
+      duplicateOf = key === null ? null : await findByDuplicateKey(key, input.id, tx);
+      finalStatus = "rejected";
+      await tx.query(
         `update invoice set status = 'rejected', processed_at = now(), route = 'reject',
-           route_reasons = $2 where id = $1`,
+           route_reasons = $2, had_text_layer = $3, text_layer = $4, field_evidence = $5::jsonb
+         where id = $1`,
         [
           input.id,
           [
             `duplicate: this supplier already issued invoice ${extraction.invoiceNumber.value} in this financial year`,
           ],
+          input.hadTextLayer,
+          input.textLayer,
+          JSON.stringify(evidence),
         ],
       );
-      return { status: "rejected", duplicateOf: original };
     }
-    throw error;
-  }
 
-  await database.query("delete from finding where invoice_id = $1", [input.id]);
-  for (const finding of input.findings) {
-    await database.query(
-      `insert into finding (invoice_id, code, severity, field_name, message)
-       values ($1, $2, $3, $4, $5)`,
-      [input.id, finding.code, severityName(finding.severity), finding.field, finding.message],
-    );
-  }
+    // Findings and runs are written on every path, the duplicate one included.
+    // A rejection that stored neither could not be audited or re-evaluated
+    // against a later prompt, which is the whole point of extraction_run.
+    await tx.query("delete from finding where invoice_id = $1", [input.id]);
+    for (const finding of input.findings) {
+      await tx.query(
+        `insert into finding (invoice_id, code, severity, field_name, message)
+         values ($1, $2, $3, $4, $5)`,
+        [input.id, finding.code, severityName(finding.severity), finding.field, finding.message],
+      );
+    }
 
-  await database.query("delete from extraction_run where invoice_id = $1", [input.id]);
-  for (const [index, raw] of input.rawRuns.entries()) {
-    await database.query(
-      `insert into extraction_run (invoice_id, run_index, model, prompt_hash, raw_output)
-       values ($1, $2, $3, $4, $5::jsonb)`,
-      [input.id, index, input.model, input.promptHash, JSON.stringify(raw)],
-    );
-  }
+    await tx.query("delete from extraction_run where invoice_id = $1", [input.id]);
+    for (const [index, raw] of input.rawRuns.entries()) {
+      await tx.query(
+        `insert into extraction_run (invoice_id, run_index, model, prompt_hash, raw_output)
+         values ($1, $2, $3, $4, $5::jsonb)`,
+        [input.id, index, input.model, input.promptHash, JSON.stringify(raw)],
+      );
+    }
 
-  return { status, duplicateOf: null };
+    return { status: finalStatus, duplicateOf };
+  });
 }
 
 export function computeDuplicateKey(extraction: InvoiceExtraction): string | null {
@@ -219,10 +297,25 @@ export function computeDuplicateKey(extraction: InvoiceExtraction): string | nul
   return duplicateKey(supplier, number, date);
 }
 
-async function findByDuplicateKey(key: string, exclude: string): Promise<string | null> {
-  const database = await getDatabase();
+/**
+ * The invoice this one duplicates.
+ *
+ * The `status <> 'rejected'` predicate is not a filter for its own sake: it
+ * matches the partial unique index, which is the only thing that makes this a
+ * lookup rather than a sequential scan. It also names the right row — a
+ * previously rejected invoice is not what the live one collides with, because
+ * the index excludes it from the uniqueness check in the first place.
+ */
+async function findByDuplicateKey(
+  key: string,
+  exclude: string,
+  client?: Queryable,
+): Promise<string | null> {
+  const database = client ?? (await getDatabase());
   const { rows } = await database.query<{ id: string }>(
-    "select id from invoice where duplicate_key = $1 and id <> $2 limit 1",
+    `select id from invoice
+     where duplicate_key = $1 and status <> 'rejected' and id <> $2
+     limit 1`,
     [key, exclude],
   );
   return rows[0]?.id ?? null;
@@ -248,7 +341,21 @@ export async function listInvoices(status?: InvoiceStatus): Promise<InvoiceRow[]
   return rows;
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Whether a path segment can be an invoice id at all.
+ *
+ * `id` is a uuid column, so a segment that is not one reaches Postgres as a bad
+ * literal and raises 22P02. An unknown id is a 404, not a server error, and
+ * checking the shape first is what makes that distinction possible.
+ */
+export function isInvoiceId(value: string): boolean {
+  return UUID.test(value);
+}
+
 export async function getInvoice(id: string): Promise<InvoiceDetail | null> {
+  if (!isInvoiceId(id)) return null;
   const database = await getDatabase();
   const { rows } = await database.query<InvoiceDetail>("select * from invoice where id = $1", [
     id,
@@ -261,6 +368,25 @@ export async function getInvoice(id: string): Promise<InvoiceDetail | null> {
     [id],
   );
   return { ...invoice, findings };
+}
+
+/**
+ * The prompt hash the stored values were produced under.
+ *
+ * A correction is only evidence about the model and prompt that produced the
+ * value being judged, which is why `correction.prompt_hash` exists at all. It
+ * has to be the hash from the extraction being corrected, not one invented at
+ * review time; otherwise the threshold-fitting script cannot tell which
+ * configuration a label belongs to and the gate can never be opened (ADR 0002).
+ */
+export async function promptHashFor(id: string): Promise<string | null> {
+  if (!isInvoiceId(id)) return null;
+  const database = await getDatabase();
+  const { rows } = await database.query<{ prompt_hash: string }>(
+    "select prompt_hash from extraction_run where invoice_id = $1 order by run_index limit 1",
+    [id],
+  );
+  return rows[0]?.prompt_hash ?? null;
 }
 
 /**
@@ -282,28 +408,6 @@ export async function recordReview(input: {
   const before = await getInvoice(input.id);
   if (!before) throw new Error(`no invoice ${input.id}`);
 
-  for (const name of FIELD_NAMES) {
-    if (!(name in input.values)) continue;
-    const corrected = input.values[name] ?? null;
-    const extracted = currentValue(before, name);
-    await database.query(
-      `insert into correction
-         (invoice_id, field_name, extracted_value, corrected_value, was_correct,
-          reviewer, model, prompt_hash)
-       values ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [
-        input.id,
-        name,
-        extracted,
-        corrected,
-        normalise(extracted) === normalise(corrected),
-        input.reviewer,
-        input.model,
-        input.promptHash,
-      ],
-    );
-  }
-
   const assignments: string[] = [];
   const parameters: unknown[] = [input.id];
   for (const name of FIELD_NAMES) {
@@ -317,25 +421,52 @@ export async function recordReview(input: {
     } else {
       const textColumn = TEXT_COLUMNS[name];
       if (!textColumn) continue;
-      parameters.push(raw);
+      parameters.push(columnValue(name, raw));
       assignments.push(`${textColumn} = $${parameters.length}`);
     }
   }
 
-  await database.query(
-    `update invoice set status = 'reviewed'${assignments.length ? ", " + assignments.join(", ") : ""}
-     where id = $1`,
-    parameters,
-  );
+  // The corrections and the invoice update are one act. Committing the labels
+  // without the update would leave the labelled set asserting a correction that
+  // was never applied, and a retry would insert every label a second time.
+  await database.transaction(async (tx) => {
+    for (const name of FIELD_NAMES) {
+      if (!(name in input.values)) continue;
+      const corrected = input.values[name] ?? null;
+      const extracted = currentValue(before, name);
+      await tx.query(
+        `insert into correction
+           (invoice_id, field_name, extracted_value, corrected_value, was_correct,
+            reviewer, model, prompt_hash)
+         values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          input.id,
+          name,
+          extracted,
+          corrected,
+          normalise(extracted) === normalise(corrected),
+          input.reviewer,
+          input.model,
+          input.promptHash,
+        ],
+      );
+    }
 
-  await database.query(
-    `update audit_sample set resolved_at = now(),
-       found_error = exists (
-         select 1 from correction where invoice_id = $1 and was_correct = false
-       )
-     where invoice_id = $1`,
-    [input.id],
-  );
+    await tx.query(
+      `update invoice set status = 'reviewed'${assignments.length ? ", " + assignments.join(", ") : ""}
+       where id = $1`,
+      parameters,
+    );
+
+    await tx.query(
+      `update audit_sample set resolved_at = now(),
+         found_error = exists (
+           select 1 from correction where invoice_id = $1 and was_correct = false
+         )
+       where invoice_id = $1`,
+      [input.id],
+    );
+  });
 }
 
 function currentValue(invoice: InvoiceDetail, name: FieldName): string | null {
@@ -347,8 +478,25 @@ function currentValue(invoice: InvoiceDetail, name: FieldName): string | null {
   const textColumn = TEXT_COLUMNS[name];
   if (!textColumn) return null;
   const value = invoice[textColumn as keyof InvoiceDetail];
-  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  if (value instanceof Date) return isoDate(value);
   return (value as string | null) ?? null;
+}
+
+/**
+ * A `date` column as the calendar day it actually is.
+ *
+ * Both drivers hand back a `date` as a JS Date at *local* midnight. East of
+ * UTC that is the previous day in UTC terms, so `toISOString().slice(0, 10)`
+ * renders 15/08 as 14/08 for every user in IST. Worse on the review screen,
+ * where the shifted value seeds the form and a reviewer confirming an
+ * unchanged field writes the wrong date back as a label. Read the local
+ * getters, which are the ones that agree with what the driver parsed.
+ */
+export function isoDate(value: Date): string {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 export function formatPaiseString(paise: string): string {
