@@ -1,6 +1,7 @@
 # invoice-extract
 
 [![ci](https://github.com/The-Thought-Magician/invoice-extract/actions/workflows/ci.yml/badge.svg)](https://github.com/The-Thought-Magician/invoice-extract/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Reads the header fields off Indian GST tax invoices so a person does not have to
 open each PDF and type numbers into something else.
@@ -100,3 +101,7 @@ turned off.
 - `docs/RESEARCH.md`: the evidence behind the decisions, with sources
 - `docs/adr/`: six architecture decision records
 - `docs/spec.md`: scope and what is still open
+
+## License
+
+MIT. See [LICENSE](LICENSE).
