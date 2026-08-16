@@ -89,3 +89,12 @@ text layer, upload, worker, review screen, duplicate detection, the schema.
 Not built: authentication, object storage, a scheduled worker process, line
 items (v2), and the threshold-fitting script that would let `COLD_START` be
 turned off.
+
+## Background
+
+- `CLAUDE.md` — start here if you are an agent or new to the repo
+- `CONTEXT.md` — the domain vocabulary
+- `docs/DECISION-LOG.md` — every design question asked, answered, and its consequence
+- `docs/RESEARCH.md` — the evidence behind the decisions, with sources
+- `docs/adr/` — six architecture decision records
+- `docs/spec.md` — scope and what is still open
