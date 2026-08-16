@@ -7,8 +7,8 @@
  * not thresholding anything. See ADR 0001.
  */
 
-import { type InvoiceExtraction, isPresent, namedFields, samplesAgree } from "./model.js";
-import { type Finding, Severity } from "./validation.js";
+import { type InvoiceExtraction, isPresent, namedFields, samplesAgree } from "./model";
+import { type Finding, Severity } from "./validation";
 
 export enum Route {
   AutoApprove = "auto_approve",

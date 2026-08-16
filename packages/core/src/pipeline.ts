@@ -12,9 +12,9 @@ import {
   type Grounded,
   type InvoiceExtraction,
   field,
-} from "./model.js";
-import { type Decision, type DecideOptions, decide } from "./routing.js";
-import { type Finding, validate } from "./validation.js";
+} from "./model";
+import { type Decision, type DecideOptions, decide } from "./routing";
+import { type Finding, validate } from "./validation";
 
 /** One model run's answer: a raw string per field, or null if not found. */
 export type ExtractionRun = Readonly<Partial<Record<FieldName, string | null>>>;
@@ -62,6 +62,61 @@ export function isGrounded(value: string, textLayer: string): boolean {
   return normaliseForGrounding(textLayer).includes(needle);
 }
 
+const SHORT_MONTHS = [
+  "jan", "feb", "mar", "apr", "may", "jun",
+  "jul", "aug", "sep", "oct", "nov", "dec",
+] as const;
+
+/**
+ * Every way an ISO date might legitimately appear on an Indian invoice.
+ *
+ * The extractor is told to return ISO 8601, but almost no Indian invoice prints
+ * it that way. Grounding has to ask whether the date is on the page in any
+ * plausible printed form, not whether the canonical string is.
+ */
+function printedDateForms(iso: string): string[] {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+  if (!match) return [];
+  const [, year, month, day] = match as unknown as [string, string, string, string];
+
+  const shortYear = year.slice(2);
+  const bareDay = String(Number(day));
+  const bareMonth = String(Number(month));
+  const monthName = SHORT_MONTHS[Number(month) - 1] as string;
+
+  const forms: string[] = [iso];
+  for (const separator of ["/", "-", "."]) {
+    for (const d of [day, bareDay]) {
+      for (const m of [month, bareMonth]) {
+        for (const y of [year, shortYear]) {
+          forms.push(`${d}${separator}${m}${separator}${y}`);
+        }
+      }
+    }
+  }
+  for (const d of [day, bareDay]) {
+    forms.push(`${d}${monthName}${year}`, `${monthName}${d}${year}`);
+  }
+  return forms;
+}
+
+/**
+ * Grounding that knows what the extractor was asked to normalise.
+ *
+ * Only the date needs this today. Everything else is copied verbatim off the
+ * page, so a literal comparison is the right one and a mismatch is real.
+ */
+export function isFieldGrounded(
+  name: FieldName,
+  value: string,
+  textLayer: string,
+): boolean {
+  if (name !== "invoiceDate") return isGrounded(value, textLayer);
+  const forms = printedDateForms(value);
+  if (forms.length === 0) return false;
+  return forms.some((form) => isGrounded(form, textLayer));
+}
+
 /**
  * Collapse independent runs into one extraction.
  *
@@ -78,7 +133,8 @@ export function mergeRuns(runs: readonly ExtractionRun[], textLayer: string): In
       .filter((v): v is string => typeof v === "string" && v.trim() !== "");
 
     const value = modalValue(samples);
-    const grounded: Grounded = value === null ? "not-attempted" : isGrounded(value, textLayer);
+    const grounded: Grounded =
+      value === null ? "not-attempted" : isFieldGrounded(name, value, textLayer);
     merged[name] = field(value, { grounded, samples });
   }
 

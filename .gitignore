@@ -2,3 +2,14 @@ __pycache__/
 *.egg-info/
 .mypy_cache/
 .pytest_cache/
+
+node_modules/
+.next/
+.storage/
+.e2e-storage/
+.dbg*/
+.shot-storage/
+test-results/
+playwright-report/
+.env
+.env.local

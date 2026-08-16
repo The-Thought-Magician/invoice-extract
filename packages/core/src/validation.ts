@@ -8,9 +8,9 @@
  * Rule references are to the CGST Rules, 2017.
  */
 
-import { isValidGstin } from "./gstin.js";
-import { absolute, impliedRateBasisPoints, parsePaise } from "./money.js";
-import { type Field, type FieldName, type InvoiceExtraction, isPresent } from "./model.js";
+import { isValidGstin } from "./gstin";
+import { absolute, impliedRateBasisPoints, parsePaise } from "./money";
+import { type Field, type FieldName, type InvoiceExtraction, isPresent } from "./model";
 
 /**
  * Rounding slack, in paise. Amounts are rounded to two decimals per line and

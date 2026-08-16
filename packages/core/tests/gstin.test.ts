@@ -8,7 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { GstinError, isValidGstin, parseGstin } from "../src/gstin.js";
+import { GstinError, isValidGstin, parseGstin } from "../src/gstin";
 
 const VALID = ["27AAPFU0939F1ZV", "29AAGCB7383J1Z4", "24AAACC1206D1ZM"] as const;
 

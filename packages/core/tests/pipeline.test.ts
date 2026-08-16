@@ -11,8 +11,8 @@ import {
   isGrounded,
   mergeRuns,
   processInvoice,
-} from "../src/pipeline.js";
-import { Route } from "../src/routing.js";
+} from "../src/pipeline";
+import { Route } from "../src/routing";
 
 const CLEAN_RUN: ExtractionRun = {
   supplierGstin: "27AAPFU0939F1ZV",

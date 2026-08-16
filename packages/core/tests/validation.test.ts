@@ -7,8 +7,8 @@
 
 import { describe, expect, it } from "vitest";
 
-import { field, type Field, type InvoiceExtraction } from "../src/model.js";
-import { Severity, validate } from "../src/validation.js";
+import { field, type Field, type InvoiceExtraction } from "../src/model";
+import { Severity, validate } from "../src/validation";
 
 const g = (value: string | null): Field => field(value, { grounded: true });
 

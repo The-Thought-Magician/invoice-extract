@@ -20,9 +20,14 @@ create type severity as enum ('fatal', 'error', 'warning');
 create type grounded as enum ('true', 'false', 'not_attempted');
 
 -- Vendor identity is the GSTIN, never the printed name (ADR 0004).
+--
+-- Deliberately not a foreign key target for invoice.supplier_gstin. Vendors are
+-- discovered from invoices rather than registered in advance, so the first
+-- invoice from an unknown supplier has to succeed. The invoice's own GSTIN is
+-- authoritative; this table is a display-name lookup, joined when a row exists.
 create table vendor (
   gstin           char(15) primary key,
-  display_name    text not null,
+  display_name    text,
   state_code      char(2) not null generated always as (substring(gstin from 1 for 2)) stored,
   pan             char(10) not null generated always as (substring(gstin from 3 for 10)) stored,
   created_at      timestamptz not null default now()
@@ -44,9 +49,13 @@ create table invoice (
 
   -- Header fields. Values are the merged modal answer across runs; the raw
   -- per-run answers live in extraction_run.
-  supplier_gstin              char(15) references vendor (gstin),
+  supplier_gstin              char(15),
   recipient_gstin             char(15),
-  invoice_number              varchar(16),   -- Rule 46(b) caps this at 16
+  -- Deliberately wider than the sixteen characters Rule 46(b) allows. An
+  -- over-long invoice number is a finding to show a reviewer, not a value to
+  -- refuse to store. A storage constraint here turns a flaggable invoice into
+  -- a failed one, which hides exactly the violation the tool exists to surface.
+  invoice_number              text,
   invoice_date                date,
   place_of_supply_state_code  char(2),
   taxable_value_paise         bigint,        -- integer paise, never float
@@ -55,7 +64,7 @@ create table invoice (
   igst_amount_paise           bigint,
   cess_amount_paise           bigint,
   total_value_paise           bigint,
-  hsn                         varchar(8),
+  hsn                         text,          -- malformed HSN is a finding, not a write failure
 
   -- Per-field evidence, keyed by field name:
   --   { "totalValue": { "grounded": "true", "samples": ["1180.00", ...] } }

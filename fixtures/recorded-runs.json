@@ -1,0 +1,482 @@
+[
+  {
+    "digest": "44234872242eb90fe5a25b4d842ac7a0e474bc0f4062a839c1567a1ef512018c",
+    "slug": "01-clean-intra-state",
+    "runs": [
+      {
+        "supplierGstin": "27AAPFU0939F1ZV",
+        "recipientGstin": "27AAGCB7383J1Z8",
+        "invoiceNumber": "INV/2026/0042",
+        "invoiceDate": "2026-07-15",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "1000.00",
+        "cgstAmount": "90.00",
+        "sgstAmount": "90.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "1180.00",
+        "hsn": "998314"
+      },
+      {
+        "supplierGstin": "27AAPFU0939F1ZV",
+        "recipientGstin": "27AAGCB7383J1Z8",
+        "invoiceNumber": "INV/2026/0042",
+        "invoiceDate": "2026-07-15",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "1000.00",
+        "cgstAmount": "90.00",
+        "sgstAmount": "90.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "1180.00",
+        "hsn": "998314"
+      },
+      {
+        "supplierGstin": "27AAPFU0939F1ZV",
+        "recipientGstin": "27AAGCB7383J1Z8",
+        "invoiceNumber": "INV/2026/0042",
+        "invoiceDate": "2026-07-15",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "1000.00",
+        "cgstAmount": "90.00",
+        "sgstAmount": "90.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "1180.00",
+        "hsn": "998314"
+      }
+    ]
+  },
+  {
+    "digest": "83c493a5c849ff92e1dabe25fa9290b8ff8d6544389ad59584242a8aa32b51b3",
+    "slug": "02-clean-inter-state",
+    "runs": [
+      {
+        "supplierGstin": "29AAGCB7383J1Z4",
+        "recipientGstin": "07AABCS1429B1ZW",
+        "invoiceNumber": "BC-2026-0117",
+        "invoiceDate": "2026-06-02",
+        "placeOfSupplyStateCode": "07",
+        "taxableValue": "37000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "6660.00",
+        "cessAmount": "0.00",
+        "totalValue": "43660.00",
+        "hsn": "8483"
+      },
+      {
+        "supplierGstin": "29AAGCB7383J1Z4",
+        "recipientGstin": "07AABCS1429B1ZW",
+        "invoiceNumber": "BC-2026-0117",
+        "invoiceDate": "2026-06-02",
+        "placeOfSupplyStateCode": "07",
+        "taxableValue": "37000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "6660.00",
+        "cessAmount": "0.00",
+        "totalValue": "43660.00",
+        "hsn": "8483"
+      },
+      {
+        "supplierGstin": "29AAGCB7383J1Z4",
+        "recipientGstin": "07AABCS1429B1ZW",
+        "invoiceNumber": "BC-2026-0117",
+        "invoiceDate": "2026-06-02",
+        "placeOfSupplyStateCode": "07",
+        "taxableValue": "37000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "6660.00",
+        "cessAmount": "0.00",
+        "totalValue": "43660.00",
+        "hsn": "8483"
+      }
+    ]
+  },
+  {
+    "digest": "67f717aadbca8ec18ca5cd466c1c31846e59ddc13fe3caf87ae02283c98769d2",
+    "slug": "03-five-percent-slab",
+    "runs": [
+      {
+        "supplierGstin": "33AACCN2082N1ZD",
+        "recipientGstin": "33AACCN2082N1ZD",
+        "invoiceNumber": "NF/26-27/318",
+        "invoiceDate": "2026-05-21",
+        "placeOfSupplyStateCode": "33",
+        "taxableValue": "12400.00",
+        "cgstAmount": "310.00",
+        "sgstAmount": "310.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "13020.00",
+        "hsn": "0904"
+      },
+      {
+        "supplierGstin": "33AACCN2082N1ZD",
+        "recipientGstin": "33AACCN2082N1ZD",
+        "invoiceNumber": "NF/26-27/318",
+        "invoiceDate": "2026-05-21",
+        "placeOfSupplyStateCode": "33",
+        "taxableValue": "12400.00",
+        "cgstAmount": "310.00",
+        "sgstAmount": "310.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "13020.00",
+        "hsn": "0904"
+      },
+      {
+        "supplierGstin": "33AACCN2082N1ZD",
+        "recipientGstin": "33AACCN2082N1ZD",
+        "invoiceNumber": "NF/26-27/318",
+        "invoiceDate": "2026-05-21",
+        "placeOfSupplyStateCode": "33",
+        "taxableValue": "12400.00",
+        "cgstAmount": "310.00",
+        "sgstAmount": "310.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "13200.00",
+        "hsn": "0904"
+      }
+    ]
+  },
+  {
+    "digest": "83a9bd581d9c546eda445157089ae33e88d9f52991e595a018e05837ecf0560e",
+    "slug": "04-invoice-number-too-long",
+    "runs": [
+      {
+        "supplierGstin": "06AAACH0850J1ZU",
+        "recipientGstin": "06AAACH0850J1ZU",
+        "invoiceNumber": "HEW/GGN/2026-2027/000891",
+        "invoiceDate": "2026-04-30",
+        "placeOfSupplyStateCode": "06",
+        "taxableValue": "9000.00",
+        "cgstAmount": "810.00",
+        "sgstAmount": "810.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "10620.00",
+        "hsn": "7318"
+      },
+      {
+        "supplierGstin": "06AAACH0850J1ZU",
+        "recipientGstin": "06AAACH0850J1ZU",
+        "invoiceNumber": "HEW/GGN/2026-2027/000891",
+        "invoiceDate": "2026-04-30",
+        "placeOfSupplyStateCode": "06",
+        "taxableValue": "9000.00",
+        "cgstAmount": "810.00",
+        "sgstAmount": "810.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "10620.00",
+        "hsn": "7318"
+      },
+      {
+        "supplierGstin": "06AAACH0850J1ZU",
+        "recipientGstin": "06AAACH0850J1ZU",
+        "invoiceNumber": "HEW/GGN/2026-2027/000891",
+        "invoiceDate": "2026-04-30",
+        "placeOfSupplyStateCode": "06",
+        "taxableValue": "9000.00",
+        "cgstAmount": "810.00",
+        "sgstAmount": "810.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "10620.00",
+        "hsn": "7318"
+      }
+    ]
+  },
+  {
+    "digest": "da13bdb29054a5569254ede46c8b08e932356deab9cd1a98c5900f0ccebc380a",
+    "slug": "05-total-mismatch",
+    "runs": [
+      {
+        "supplierGstin": "19AABCT3518Q1ZT",
+        "recipientGstin": "19AABCT3518Q1ZT",
+        "invoiceNumber": "TS/2026/0771",
+        "invoiceDate": "2026-07-01",
+        "placeOfSupplyStateCode": "19",
+        "taxableValue": "60000.00",
+        "cgstAmount": "5400.00",
+        "sgstAmount": "5400.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "71800.00",
+        "hsn": "998313"
+      },
+      {
+        "supplierGstin": "19AABCT3518Q1ZT",
+        "recipientGstin": "19AABCT3518Q1ZT",
+        "invoiceNumber": "TS/2026/0771",
+        "invoiceDate": "2026-07-01",
+        "placeOfSupplyStateCode": "19",
+        "taxableValue": "60000.00",
+        "cgstAmount": "5400.00",
+        "sgstAmount": "5400.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "71800.00",
+        "hsn": "998313"
+      },
+      {
+        "supplierGstin": "19AABCT3518Q1ZT",
+        "recipientGstin": "19AABCT3518Q1ZT",
+        "invoiceNumber": "TS/2026/0771",
+        "invoiceDate": "2026-07-01",
+        "placeOfSupplyStateCode": "19",
+        "taxableValue": "60000.00",
+        "cgstAmount": "5400.00",
+        "sgstAmount": "5400.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "71800.00",
+        "hsn": "998313"
+      }
+    ]
+  },
+  {
+    "digest": "79039a51d86d1cf891b752e022078480111031f732b7fee672ed13b5e503019d",
+    "slug": "06-scan-clean-intra-state",
+    "runs": [
+      {
+        "supplierGstin": "27AAACR5055K1Z7",
+        "recipientGstin": "27AAPFU0939F1ZV",
+        "invoiceNumber": "RI-2026-0208",
+        "invoiceDate": "2026-06-18",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "22400.00",
+        "cgstAmount": "2016.00",
+        "sgstAmount": "2016.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26432.00",
+        "hsn": "8544"
+      },
+      {
+        "supplierGstin": "27AAACR5055K1Z7",
+        "recipientGstin": "27AAPFU0939F1ZV",
+        "invoiceNumber": "RI-2026-0208",
+        "invoiceDate": "2026-06-18",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "22400.00",
+        "cgstAmount": "2016.00",
+        "sgstAmount": "2016.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26432.00",
+        "hsn": "8544"
+      },
+      {
+        "supplierGstin": "27AAACR5055K1Z7",
+        "recipientGstin": "27AAPFU0939F1ZV",
+        "invoiceNumber": "RI-2026-0208",
+        "invoiceDate": "2026-06-18",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "22400.00",
+        "cgstAmount": "2016.00",
+        "sgstAmount": "2016.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26432.00",
+        "hsn": "8544"
+      }
+    ]
+  },
+  {
+    "digest": "30dae5b351658090809eadc5874d56e53058ebde2711b411b32cb9b756d954a9",
+    "slug": "07-scan-clean-inter-state",
+    "runs": [
+      {
+        "supplierGstin": "36AADCB2923M1ZM",
+        "recipientGstin": "27AAGCB7384J1Z8",
+        "invoiceNumber": "BCL/26/1442",
+        "invoiceDate": "2026-07-09",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "55800.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "10044.00",
+        "cessAmount": "0.00",
+        "totalValue": "65844.00",
+        "hsn": "6907"
+      },
+      {
+        "supplierGstin": "36AADCB2923M1ZM",
+        "recipientGstin": "27AAGCB7384J1Z8",
+        "invoiceNumber": "BCL/26/1442",
+        "invoiceDate": "2026-07-09",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "55800.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "10044.00",
+        "cessAmount": "0.00",
+        "totalValue": "65844.00",
+        "hsn": "6907"
+      },
+      {
+        "supplierGstin": "36AADCB2923M1ZM",
+        "recipientGstin": "27AAGCB7384J1Z8",
+        "invoiceNumber": "BCL/26/1442",
+        "invoiceDate": "2026-07-09",
+        "placeOfSupplyStateCode": "27",
+        "taxableValue": "55800.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "10044.00",
+        "cessAmount": "0.00",
+        "totalValue": "65844.00",
+        "hsn": "6907"
+      }
+    ]
+  },
+  {
+    "digest": "43d9f944bffa3c678eff436d757b108fc3773f7b7c78da2a130c19c029fa7703",
+    "slug": "08-scan-wrong-tax-head",
+    "runs": [
+      {
+        "supplierGstin": "29AAACI1195H1ZI",
+        "recipientGstin": "29AAGCB7383J1Z4",
+        "invoiceNumber": "IC/2026/0654",
+        "invoiceDate": "2026-05-08",
+        "placeOfSupplyStateCode": "29",
+        "taxableValue": "84000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "15120.00",
+        "cessAmount": "0.00",
+        "totalValue": "99120.00",
+        "hsn": "2815"
+      },
+      {
+        "supplierGstin": "29AAACI1195H1ZI",
+        "recipientGstin": "29AAGCB7383J1Z4",
+        "invoiceNumber": "IC/2026/0654",
+        "invoiceDate": "2026-05-08",
+        "placeOfSupplyStateCode": "29",
+        "taxableValue": "84000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "15120.00",
+        "cessAmount": "0.00",
+        "totalValue": "99120.00",
+        "hsn": "2815"
+      },
+      {
+        "supplierGstin": "29AAACI1195H1ZI",
+        "recipientGstin": "29AAGCB7383J1Z4",
+        "invoiceNumber": "IC/2026/0654",
+        "invoiceDate": "2026-05-08",
+        "placeOfSupplyStateCode": "29",
+        "taxableValue": "84000.00",
+        "cgstAmount": "0.00",
+        "sgstAmount": "0.00",
+        "igstAmount": "15120.00",
+        "cessAmount": "0.00",
+        "totalValue": "99120.00",
+        "hsn": "2815"
+      }
+    ]
+  },
+  {
+    "digest": "30366564d5809c9e44960b4259b9170452057ddc209e4ff89d36c9ebddda06b5",
+    "slug": "09-scan-bad-gstin-checkdigit",
+    "runs": [
+      {
+        "supplierGstin": "08AAECP4653R1ZQ",
+        "recipientGstin": "08AAECP4653R1ZP",
+        "invoiceNumber": "PE/2026/0093",
+        "invoiceDate": "2026-04-12",
+        "placeOfSupplyStateCode": "08",
+        "taxableValue": "22800.00",
+        "cgstAmount": "2052.00",
+        "sgstAmount": "2052.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26904.00",
+        "hsn": "7326"
+      },
+      {
+        "supplierGstin": "08AAECP4653R1ZQ",
+        "recipientGstin": "08AAECP4653R1ZP",
+        "invoiceNumber": "PE/2026/0093",
+        "invoiceDate": "2026-04-12",
+        "placeOfSupplyStateCode": "08",
+        "taxableValue": "22800.00",
+        "cgstAmount": "2052.00",
+        "sgstAmount": "2052.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26904.00",
+        "hsn": "7326"
+      },
+      {
+        "supplierGstin": "08AAECP4653R1ZQ",
+        "recipientGstin": "08AAECP4653R1ZP",
+        "invoiceNumber": "PE/2026/0093",
+        "invoiceDate": "2026-04-12",
+        "placeOfSupplyStateCode": "08",
+        "taxableValue": "22800.00",
+        "cgstAmount": "2052.00",
+        "sgstAmount": "2052.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "26904.00",
+        "hsn": "7326"
+      }
+    ]
+  },
+  {
+    "digest": "0ca8c8ea3964e7c7df13d02f14769fe6658415dd5defcfd0e85c467adc490ce9",
+    "slug": "10-scan-no-invoice-number",
+    "runs": [
+      {
+        "supplierGstin": "24AAACC1206D1ZM",
+        "recipientGstin": "24AAACC1206D1ZM",
+        "invoiceNumber": null,
+        "invoiceDate": "2026-06-25",
+        "placeOfSupplyStateCode": "24",
+        "taxableValue": "34000.00",
+        "cgstAmount": "3060.00",
+        "sgstAmount": "3060.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "40120.00",
+        "hsn": "4819"
+      },
+      {
+        "supplierGstin": "24AAACC1206D1ZM",
+        "recipientGstin": "24AAACC1206D1ZM",
+        "invoiceNumber": null,
+        "invoiceDate": "2026-06-25",
+        "placeOfSupplyStateCode": "24",
+        "taxableValue": "34000.00",
+        "cgstAmount": "3060.00",
+        "sgstAmount": "3060.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "40120.00",
+        "hsn": "4819"
+      },
+      {
+        "supplierGstin": "24AAACC1206D1ZM",
+        "recipientGstin": "24AAACC1206D1ZM",
+        "invoiceNumber": null,
+        "invoiceDate": "2026-06-25",
+        "placeOfSupplyStateCode": "24",
+        "taxableValue": "34000.00",
+        "cgstAmount": "3060.00",
+        "sgstAmount": "3060.00",
+        "igstAmount": "0.00",
+        "cessAmount": "0.00",
+        "totalValue": "40120.00",
+        "hsn": "4819"
+      }
+    ]
+  }
+]

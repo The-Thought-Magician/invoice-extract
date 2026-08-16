@@ -6,9 +6,9 @@
 
 import { describe, expect, it } from "vitest";
 
-import { field, type Field, type InvoiceExtraction } from "../src/model.js";
-import { type DecideOptions, decide, Route } from "../src/routing.js";
-import { validate } from "../src/validation.js";
+import { field, type Field, type InvoiceExtraction } from "../src/model";
+import { type DecideOptions, decide, Route } from "../src/routing";
+import { validate } from "../src/validation";
 
 const g = (value: string | null): Field => field(value, { grounded: true });
 

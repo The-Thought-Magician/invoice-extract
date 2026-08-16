@@ -1,0 +1,254 @@
+[
+  {
+    "slug": "01-clean-intra-state",
+    "file": "pdfs/01-clean-intra-state.pdf",
+    "scanned": false,
+    "note": "",
+    "expect": {
+      "route": "auto_approve",
+      "codes": []
+    },
+    "truth": {
+      "supplierGstin": "27AAPFU0939F1ZV",
+      "recipientGstin": "27AAGCB7383J1Z8",
+      "invoiceNumber": "INV/2026/0042",
+      "invoiceDate": "2026-07-15",
+      "placeOfSupplyStateCode": "27",
+      "taxableValue": "1000.00",
+      "cgstAmount": "90.00",
+      "sgstAmount": "90.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "1180.00",
+      "hsn": "998314"
+    }
+  },
+  {
+    "slug": "02-clean-inter-state",
+    "file": "pdfs/02-clean-inter-state.pdf",
+    "scanned": false,
+    "note": "",
+    "expect": {
+      "route": "auto_approve",
+      "codes": []
+    },
+    "truth": {
+      "supplierGstin": "29AAGCB7383J1Z4",
+      "recipientGstin": "07AABCS1429B1ZW",
+      "invoiceNumber": "BC-2026-0117",
+      "invoiceDate": "2026-06-02",
+      "placeOfSupplyStateCode": "07",
+      "taxableValue": "37000.00",
+      "cgstAmount": "0.00",
+      "sgstAmount": "0.00",
+      "igstAmount": "6660.00",
+      "cessAmount": "0.00",
+      "totalValue": "43660.00",
+      "hsn": "8483"
+    }
+  },
+  {
+    "slug": "03-five-percent-slab",
+    "file": "pdfs/03-five-percent-slab.pdf",
+    "scanned": false,
+    "note": "",
+    "expect": {
+      "route": "review",
+      "codes": [],
+      "becauseOfRecording": "recorded runs disagree on the total"
+    },
+    "truth": {
+      "supplierGstin": "33AACCN2082N1ZD",
+      "recipientGstin": "33AACCN2082N1ZD",
+      "invoiceNumber": "NF/26-27/318",
+      "invoiceDate": "2026-05-21",
+      "placeOfSupplyStateCode": "33",
+      "taxableValue": "12400.00",
+      "cgstAmount": "310.00",
+      "sgstAmount": "310.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "13020.00",
+      "hsn": "0904"
+    }
+  },
+  {
+    "slug": "04-invoice-number-too-long",
+    "file": "pdfs/04-invoice-number-too-long.pdf",
+    "scanned": false,
+    "note": "Invoice number exceeds the sixteen characters permitted by Rule 46(b).",
+    "expect": {
+      "route": "review",
+      "codes": [
+        "INVOICE_NUMBER_TOO_LONG"
+      ]
+    },
+    "truth": {
+      "supplierGstin": "06AAACH0850J1ZU",
+      "recipientGstin": "06AAACH0850J1ZU",
+      "invoiceNumber": "HEW/GGN/2026-2027/000891",
+      "invoiceDate": "2026-04-30",
+      "placeOfSupplyStateCode": "06",
+      "taxableValue": "9000.00",
+      "cgstAmount": "810.00",
+      "sgstAmount": "810.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "10620.00",
+      "hsn": "7318"
+    }
+  },
+  {
+    "slug": "05-total-mismatch",
+    "file": "pdfs/05-total-mismatch.pdf",
+    "scanned": false,
+    "note": "Printed total does not equal taxable value plus tax. Correct total is 70800.00.",
+    "expect": {
+      "route": "review",
+      "codes": [
+        "TOTAL_MISMATCH"
+      ]
+    },
+    "truth": {
+      "supplierGstin": "19AABCT3518Q1ZT",
+      "recipientGstin": "19AABCT3518Q1ZT",
+      "invoiceNumber": "TS/2026/0771",
+      "invoiceDate": "2026-07-01",
+      "placeOfSupplyStateCode": "19",
+      "taxableValue": "60000.00",
+      "cgstAmount": "5400.00",
+      "sgstAmount": "5400.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "71800.00",
+      "hsn": "998313"
+    }
+  },
+  {
+    "slug": "06-scan-clean-intra-state",
+    "file": "pdfs/06-scan-clean-intra-state.pdf",
+    "scanned": true,
+    "note": "",
+    "expect": {
+      "route": "review",
+      "codes": []
+    },
+    "truth": {
+      "supplierGstin": "27AAACR5055K1Z7",
+      "recipientGstin": "27AAPFU0939F1ZV",
+      "invoiceNumber": "RI-2026-0208",
+      "invoiceDate": "2026-06-18",
+      "placeOfSupplyStateCode": "27",
+      "taxableValue": "22400.00",
+      "cgstAmount": "2016.00",
+      "sgstAmount": "2016.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "26432.00",
+      "hsn": "8544"
+    }
+  },
+  {
+    "slug": "07-scan-clean-inter-state",
+    "file": "pdfs/07-scan-clean-inter-state.pdf",
+    "scanned": true,
+    "note": "",
+    "expect": {
+      "route": "review",
+      "codes": [],
+      "becauseOfRecording": "recorded runs agree on a recipient GSTIN that is not on the page"
+    },
+    "truth": {
+      "supplierGstin": "36AADCB2923M1ZM",
+      "recipientGstin": "27AAGCB7383J1Z8",
+      "invoiceNumber": "BCL/26/1442",
+      "invoiceDate": "2026-07-09",
+      "placeOfSupplyStateCode": "27",
+      "taxableValue": "55800.00",
+      "cgstAmount": "0.00",
+      "sgstAmount": "0.00",
+      "igstAmount": "10044.00",
+      "cessAmount": "0.00",
+      "totalValue": "65844.00",
+      "hsn": "6907"
+    }
+  },
+  {
+    "slug": "08-scan-wrong-tax-head",
+    "file": "pdfs/08-scan-wrong-tax-head.pdf",
+    "scanned": true,
+    "note": "Supplier and place of supply are both Karnataka, so this is an intra-state supply wrongly charged as IGST.",
+    "expect": {
+      "route": "review",
+      "codes": [
+        "WRONG_TAX_HEAD"
+      ]
+    },
+    "truth": {
+      "supplierGstin": "29AAACI1195H1ZI",
+      "recipientGstin": "29AAGCB7383J1Z4",
+      "invoiceNumber": "IC/2026/0654",
+      "invoiceDate": "2026-05-08",
+      "placeOfSupplyStateCode": "29",
+      "taxableValue": "84000.00",
+      "cgstAmount": "0.00",
+      "sgstAmount": "0.00",
+      "igstAmount": "15120.00",
+      "cessAmount": "0.00",
+      "totalValue": "99120.00",
+      "hsn": "2815"
+    }
+  },
+  {
+    "slug": "09-scan-bad-gstin-checkdigit",
+    "file": "pdfs/09-scan-bad-gstin-checkdigit.pdf",
+    "scanned": true,
+    "note": "Supplier GSTIN check character is Q where the mod-36 algorithm requires P. A single-character error, caught with certainty.",
+    "expect": {
+      "route": "review",
+      "codes": [
+        "SUPPLIER_GSTIN_INVALID"
+      ]
+    },
+    "truth": {
+      "supplierGstin": "08AAECP4653R1ZQ",
+      "recipientGstin": "08AAECP4653R1ZP",
+      "invoiceNumber": "PE/2026/0093",
+      "invoiceDate": "2026-04-12",
+      "placeOfSupplyStateCode": "08",
+      "taxableValue": "22800.00",
+      "cgstAmount": "2052.00",
+      "sgstAmount": "2052.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "26904.00",
+      "hsn": "7326"
+    }
+  },
+  {
+    "slug": "10-scan-no-invoice-number",
+    "file": "pdfs/10-scan-no-invoice-number.pdf",
+    "scanned": true,
+    "note": "No invoice number at all. Rule 46(b) makes this not a tax invoice, so the pipeline must reject rather than queue it for review.",
+    "expect": {
+      "route": "reject",
+      "codes": [
+        "MISSING_INVOICE_NUMBER"
+      ]
+    },
+    "truth": {
+      "supplierGstin": "24AAACC1206D1ZM",
+      "recipientGstin": "24AAACC1206D1ZM",
+      "invoiceNumber": null,
+      "invoiceDate": "2026-06-25",
+      "placeOfSupplyStateCode": "24",
+      "taxableValue": "34000.00",
+      "cgstAmount": "3060.00",
+      "sgstAmount": "3060.00",
+      "igstAmount": "0.00",
+      "cessAmount": "0.00",
+      "totalValue": "40120.00",
+      "hsn": "4819"
+    }
+  }
+]
