@@ -1,5 +1,7 @@
 # invoice-extract
 
+[![ci](https://github.com/The-Thought-Magician/invoice-extract/actions/workflows/ci.yml/badge.svg)](https://github.com/The-Thought-Magician/invoice-extract/actions/workflows/ci.yml)
+
 Reads the header fields off Indian GST tax invoices so a person does not have to
 open each PDF and type numbers into something else.
 
